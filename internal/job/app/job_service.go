@@ -7,11 +7,11 @@ type JobServicePort interface {
 }
 
 type JobService struct {
-	repo domain.JobRepository
+	Repo domain.JobRepository
 }
 
 func NewJobService(repo domain.JobRepository) *JobService {
 	return &JobService{
-		repo: repo,
+		Repo: repo,
 	}
 }
