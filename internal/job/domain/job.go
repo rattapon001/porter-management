@@ -44,9 +44,14 @@ type Job struct {
 	Aggregate Aggregate `bson:"aggregate"`
 }
 
-func CreateNewJob(location Location, patient Patient, porter Porter) *Job {
+func CreateNewJob(location Location, patient Patient, porter Porter) (*Job, error) {
+
+	ID, err := uuid.NewUUID()
+	if err != nil {
+		return nil, err
+	}
 	job := &Job{
-		ID:       JobId(uuid.New().String()),
+		ID:       JobId(ID.String()),
 		Version:  1,
 		Status:   JobStatusPending,
 		Location: location,
@@ -54,7 +59,7 @@ func CreateNewJob(location Location, patient Patient, porter Porter) *Job {
 		Porter:   porter,
 	}
 	job.JobCreatedEvent()
-	return job
+	return job, nil
 }
 
 func (j *Job) JobCreatedEvent() {
