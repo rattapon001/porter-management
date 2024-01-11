@@ -5,6 +5,7 @@ import (
 
 	"github.com/rattapon001/porter-management/internal/job/app"
 	"github.com/rattapon001/porter-management/internal/job/domain"
+	"github.com/rattapon001/porter-management/internal/job/infra/memory"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -33,7 +34,8 @@ func TestCreatedNewJob(t *testing.T) {
 		Name: "John Smith",
 		HN:   "HN123",
 	}
-	createdJob, err := jobService.CreatedNewJob(location, patient)
+	publisher := memory.NewMemoryEventHandler()
+	createdJob, err := jobService.CreatedNewJob(location, patient, publisher)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.JobStatusPending, createdJob.Status, "created job status should be pending")
 	assert.Equal(1, len(createdJob.Aggregate.Events), "created job should have 1 event")
