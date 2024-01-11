@@ -2,16 +2,16 @@ package app
 
 import "github.com/rattapon001/porter-management/internal/job/domain"
 
-type JobServicePort interface {
-	CreateJob(location domain.Location, patient domain.Patient) (*domain.Job, error)
+type JobService interface {
+	CreatedNewJob(location domain.Location, patient domain.Patient) (*domain.Job, error)
 }
 
-type JobService struct {
+type JobServiceImpl struct {
 	Repo domain.JobRepository
 }
 
-func NewJobService(repo domain.JobRepository) *JobService {
-	return &JobService{
+func NewJobService(repo domain.JobRepository) JobService {
+	return &JobServiceImpl{
 		Repo: repo,
 	}
 }

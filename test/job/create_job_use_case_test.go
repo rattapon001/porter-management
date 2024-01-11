@@ -22,7 +22,7 @@ func TestCreatedNewJob(t *testing.T) {
 	assert := assert.New(t)
 	mockRepo := new(MockRepository)
 	mockRepo.On("Save", mock.AnythingOfType("*domain.Job")).Return(nil)
-	jobService := app.JobService{
+	jobService := app.JobServiceImpl{
 		Repo: mockRepo,
 	}
 	location := domain.Location{
