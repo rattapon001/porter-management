@@ -10,6 +10,7 @@ import (
 func TestCreateNewPorter(t *testing.T) {
 	assert := assert.New(t)
 
-	createdPorter, _ := domain.CreateNewPorter("John Smith", "porter-001")
+	createdPorter, err := domain.CreateNewPorter("John Smith", "porter-001")
+	assert.Nil(err, "error should be nil")
 	assert.Equal(domain.PorterStatusUnavailable, createdPorter.Status, "created porter status should be unavailable")
 }
