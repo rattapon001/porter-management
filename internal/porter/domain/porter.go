@@ -46,6 +46,10 @@ func (p *Porter) Unavailable() {
 	p.Status = PorterStatusUnavailable
 }
 
-func (p *Porter) SetToken(token string) {
+func (p *Porter) InvokedToken(token string) {
 	p.Token = token
+}
+
+func (p *Porter) RevokedToken() {
+	p.Token = ""
 }

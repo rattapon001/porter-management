@@ -21,7 +21,7 @@ func (p *Pool) FindAvailablePorter() *Porter {
 
 func (p *Pool) PorterRegister(porter *Porter, token string) {
 	porter.Available()
-	porter.SetToken(token)
+	porter.InvokedToken(token)
 	p.Porters = append(p.Porters, porter)
 }
 
@@ -36,6 +36,7 @@ func (p *Pool) PorterAcceptJob(porter *Porter) {
 
 func (p *Pool) PorterUnavailable(porter *Porter) {
 	porter.Unavailable()
+	porter.RevokedToken()
 	for i, _p := range p.Porters {
 		if _p.ID == porter.ID {
 			p.Porters = append(p.Porters[:i], p.Porters[i+1:]...)
