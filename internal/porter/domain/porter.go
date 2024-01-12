@@ -2,7 +2,7 @@ package domain
 
 import "github.com/google/uuid"
 
-type PorterId int64
+type PorterId string
 type PorterStatus string
 
 const (
@@ -26,7 +26,7 @@ func CreateNewPorter(name string, porterCode string) (*Porter, error) {
 		return nil, err
 	}
 	return &Porter{
-		ID:         PorterId(ID.ID()),
+		ID:         PorterId(ID.String()),
 		Name:       name,
 		PorterCode: porterCode,
 		Status:     PorterStatusUnavailable,
