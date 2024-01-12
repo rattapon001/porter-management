@@ -44,7 +44,7 @@ type Job struct {
 	Aggregate Aggregate `bson:"aggregate"`
 }
 
-func CreateNewJob(location Location, patient Patient) (*Job, error) {
+func CreatedNewJob(location Location, patient Patient) (*Job, error) {
 
 	ID, err := uuid.NewUUID()
 	if err != nil {

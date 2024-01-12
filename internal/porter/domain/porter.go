@@ -16,9 +16,10 @@ type Porter struct {
 	Name       string
 	PorterCode string
 	Status     PorterStatus
+	Token      string
 }
 
-func CreateNewPorter(name string, porterCode string) (*Porter, error) {
+func CreatedNewPorter(name string, porterCode string) (*Porter, error) {
 
 	ID, err := uuid.NewUUID()
 
@@ -43,4 +44,8 @@ func (p *Porter) Available() {
 
 func (p *Porter) Unavailable() {
 	p.Status = PorterStatusUnavailable
+}
+
+func (p *Porter) SetToken(token string) {
+	p.Token = token
 }

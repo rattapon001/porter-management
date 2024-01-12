@@ -6,7 +6,7 @@ import (
 )
 
 func (s *JobServiceImpl) CreatedNewJob(location domain.Location, patient domain.Patient, publisher command.EventHandler) (*domain.Job, error) {
-	job, err := domain.CreateNewJob(location, patient)
+	job, err := domain.CreatedNewJob(location, patient)
 	if err != nil {
 		return nil, err
 	}
