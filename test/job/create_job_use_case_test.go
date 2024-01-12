@@ -5,7 +5,6 @@ import (
 
 	"github.com/rattapon001/porter-management/internal/job/app"
 	"github.com/rattapon001/porter-management/internal/job/domain"
-	"github.com/rattapon001/porter-management/internal/job/infra/memory"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -16,6 +15,15 @@ type MockRepository struct {
 
 func (m *MockRepository) Save(job *domain.Job) error {
 	args := m.Called(job)
+	return args.Error(0)
+}
+
+type MockEventHandler struct {
+	mock.Mock
+}
+
+func (m *MockEventHandler) Publish(event []domain.Event) error {
+	args := m.Called(event)
 	return args.Error(0)
 }
 
@@ -34,7 +42,9 @@ func TestCreatedNewJob(t *testing.T) {
 		Name: "John Smith",
 		HN:   "HN123",
 	}
-	publisher := memory.NewMemoryEventHandler()
+	mockPublisher := new(MockEventHandler)
+	mockPublisher.On("Publish", mock.AnythingOfType("[]domain.Event")).Return(nil)
+	publisher := mockPublisher
 	createdJob, err := jobService.CreatedNewJob(location, patient, publisher)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.JobStatusPending, createdJob.Status, "created job status should be pending")
