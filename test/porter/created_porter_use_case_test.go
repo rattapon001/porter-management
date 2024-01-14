@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/rattapon001/porter-management/internal/porter/app"
-	event "github.com/rattapon001/porter-management/internal/porter/app/event_handler"
 	"github.com/rattapon001/porter-management/internal/porter/domain"
+	"github.com/rattapon001/porter-management/pkg"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -38,7 +38,7 @@ type MockEventHandler struct {
 	mock.Mock
 }
 
-func (m *MockEventHandler) Publish(event []event.Event) error {
+func (m *MockEventHandler) Publish(event []pkg.Event) error {
 	args := m.Called(event)
 	return args.Error(0)
 }

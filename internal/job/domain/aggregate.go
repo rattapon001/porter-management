@@ -1,23 +1,18 @@
 package domain
 
-type EventName string
+import "github.com/rattapon001/porter-management/pkg"
 
 const (
-	JobCreated   EventName = "job_created"
-	JobAccepted  EventName = "job_accepted"
-	JobWorking   EventName = "job_working"
-	JobCompleted EventName = "job_completed"
+	JobCreated   pkg.EventName = "job_created"
+	JobAccepted  pkg.EventName = "job_accepted"
+	JobWorking   pkg.EventName = "job_working"
+	JobCompleted pkg.EventName = "job_completed"
 )
 
-type Event struct {
-	EventName EventName
-	Payload   interface{}
-}
-
 type Aggregate struct {
-	Events []Event
+	Events []pkg.Event
 }
 
-func (a *Aggregate) AppendEvent(eventName EventName, payload interface{}) {
-	a.Events = append(a.Events, Event{EventName: eventName, Payload: payload})
+func (a *Aggregate) AppendEvent(eventName pkg.EventName, payload interface{}) {
+	a.Events = append(a.Events, pkg.Event{EventName: eventName, Payload: payload})
 }

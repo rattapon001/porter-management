@@ -1,7 +1,9 @@
 package event
 
-import "github.com/rattapon001/porter-management/internal/job/domain"
+import (
+	"github.com/rattapon001/porter-management/pkg"
+)
 
 type EventHandler interface {
-	Publish(event []domain.Event) error
+	Publish(event []pkg.Event) error
 }

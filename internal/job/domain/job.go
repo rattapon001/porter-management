@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/rattapon001/porter-management/pkg"
 )
 
 type JobId string
@@ -62,7 +63,7 @@ func CreatedNewJob(location Location, patient Patient) (*Job, error) {
 }
 
 func (j *Job) JobCreatedEvent() {
-	event := Event{
+	event := pkg.Event{
 		EventName: JobCreated,
 		Payload: map[string]interface{}{
 			"job_id":   j.ID,
