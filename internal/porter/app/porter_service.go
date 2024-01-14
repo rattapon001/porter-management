@@ -13,13 +13,11 @@ type PorterService interface {
 type PorterServiceImpl struct {
 	Repo      domain.PorterRepository
 	Publisher event.EventHandler
-	Pool      domain.Pool
 }
 
-func NewPorterService(repo domain.PorterRepository, publisher event.EventHandler, pool domain.Pool) PorterService {
+func NewPorterService(repo domain.PorterRepository, publisher event.EventHandler) PorterService {
 	return &PorterServiceImpl{
 		Repo:      repo,
 		Publisher: publisher,
-		Pool:      pool,
 	}
 }
