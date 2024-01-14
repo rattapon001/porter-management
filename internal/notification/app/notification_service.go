@@ -1,7 +1,7 @@
 package app
 
 type NotificationService interface {
-	Notify(token, message string) error
+	Notify(token, payload string) error
 }
 
 type NotificationServiceImpl struct {

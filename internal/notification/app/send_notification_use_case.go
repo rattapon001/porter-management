@@ -1,5 +1,5 @@
 package app
 
-func (m *NotificationServiceImpl) Notify(token string, message string) error {
+func (m *NotificationServiceImpl) Notify(token string, payload string) error {
 	return nil
 }
