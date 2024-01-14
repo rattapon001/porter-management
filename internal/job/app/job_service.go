@@ -6,15 +6,17 @@ import (
 )
 
 type JobService interface {
-	CreatedNewJob(location domain.Location, patient domain.Patient, publisher event.EventHandler) (*domain.Job, error)
+	CreatedNewJob(location domain.Location, patient domain.Patient) (*domain.Job, error)
 }
 
 type JobServiceImpl struct {
-	Repo domain.JobRepository
+	Repo      domain.JobRepository
+	Publisher event.EventHandler
 }
 
-func NewJobService(repo domain.JobRepository) JobService {
+func NewJobService(repo domain.JobRepository, publisher event.EventHandler) JobService {
 	return &JobServiceImpl{
-		Repo: repo,
+		Repo:      repo,
+		Publisher: publisher,
 	}
 }
