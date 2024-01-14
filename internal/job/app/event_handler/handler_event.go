@@ -1,4 +1,4 @@
-package command
+package event
 
 import "github.com/rattapon001/porter-management/internal/job/domain"
 

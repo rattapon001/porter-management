@@ -1,11 +1,11 @@
 package app
 
 import (
-	"github.com/rattapon001/porter-management/internal/job/app/command"
+	event "github.com/rattapon001/porter-management/internal/job/app/event_handler"
 	"github.com/rattapon001/porter-management/internal/job/domain"
 )
 
-func (s *JobServiceImpl) CreatedNewJob(location domain.Location, patient domain.Patient, publisher command.EventHandler) (*domain.Job, error) {
+func (s *JobServiceImpl) CreatedNewJob(location domain.Location, patient domain.Patient, publisher event.EventHandler) (*domain.Job, error) {
 	job, err := domain.CreatedNewJob(location, patient)
 	if err != nil {
 		return nil, err
