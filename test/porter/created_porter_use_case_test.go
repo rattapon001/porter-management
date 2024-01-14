@@ -19,6 +19,21 @@ func (m *MockRepository) Save(job *domain.Porter) error {
 	return args.Error(0)
 }
 
+func (m *MockRepository) Update(job *domain.Porter) error {
+	args := m.Called(job)
+	return args.Error(0)
+}
+
+func (m *MockRepository) FindAvailablePorter() *domain.Porter {
+	args := m.Called()
+	return args.Get(0).(*domain.Porter)
+}
+
+func (m *MockRepository) FindByID(id domain.PorterId) *domain.Porter {
+	args := m.Called(id)
+	return args.Get(0).(*domain.Porter)
+}
+
 type MockEventHandler struct {
 	mock.Mock
 }
@@ -41,7 +56,9 @@ func TestCreatedPorterUseCase(t *testing.T) {
 		Publisher: mockPublisher,
 	}
 
-	porter, err := porterService.CreatedNewPorter("porter1")
+	token := "token"
+
+	porter, err := porterService.CreatedNewPorter("porter1", token)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.PorterStatusUnavailable, porter.Status, "created porter status should be available")
 }

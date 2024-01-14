@@ -19,7 +19,7 @@ type Porter struct {
 	Token      string
 }
 
-func CreatedNewPorter(name string, porterCode string) (*Porter, error) {
+func CreatedNewPorter(name string, porterCode string, token string) (*Porter, error) {
 
 	ID, err := uuid.NewUUID()
 

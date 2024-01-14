@@ -6,8 +6,8 @@ import (
 )
 
 type PorterService interface {
-	CreatedNewPorter(name string) (*domain.Porter, error)
-	ReadyForJob(porter *domain.Porter, token string) error
+	CreatedNewPorter(name string, token string) (*domain.Porter, error)
+	ReadyForJob(ID domain.PorterId) error
 }
 
 type PorterServiceImpl struct {
