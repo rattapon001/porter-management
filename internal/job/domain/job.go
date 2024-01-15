@@ -61,6 +61,18 @@ func CreatedNewJob(location Location, patient Patient) (*Job, error) {
 	return job, nil
 }
 
+func (j *Job) JobCreatedEvent() {
+
+	payload := map[string]interface{}{
+		"job_id":   j.ID,
+		"version":  j.Version,
+		"status":   j.Status,
+		"location": j.Location,
+		"patient":  j.Patient,
+	}
+	j.Aggregate.AppendEvent(JobEventCreated, payload)
+}
+
 func (j *Job) AcceptedJob(porter Porter) {
 	if j.Status != JobStatusPending {
 		return
@@ -70,6 +82,14 @@ func (j *Job) AcceptedJob(porter Porter) {
 	j.Porter = porter
 	j.CheckIn = time.Now()
 	j.JobAcceptedEvent()
+}
+
+func (j *Job) StartedJob() {
+	if j.Status != JobStatusAccepted {
+		return
+	}
+	j.Status = JobStatusWorking
+	j.JobStartedEvent()
 }
 
 func (j *Job) JobAcceptedEvent() {
@@ -85,14 +105,16 @@ func (j *Job) JobAcceptedEvent() {
 	j.Aggregate.AppendEvent(JobEventAccepted, payload)
 }
 
-func (j *Job) JobCreatedEvent() {
+func (j *Job) JobStartedEvent() {
 
 	payload := map[string]interface{}{
 		"job_id":   j.ID,
-		"version":  j.Version,
+		"version":  j.Version + 1,
 		"status":   j.Status,
 		"location": j.Location,
 		"patient":  j.Patient,
+		"porter":   j.Porter,
+		"check_in": j.CheckIn,
 	}
-	j.Aggregate.AppendEvent(JobEventCreated, payload)
+	j.Aggregate.AppendEvent(JobEventWorking, payload)
 }

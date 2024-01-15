@@ -9,6 +9,7 @@ type JobService interface {
 	CreatedNewJob(location domain.Location, patient domain.Patient) (*domain.Job, error)
 	AcceptedJob(id domain.JobId, porter domain.Porter) (*domain.Job, error)
 	FindJobById(id domain.JobId) (*domain.Job, error)
+	StartedJob(id domain.JobId) (*domain.Job, error)
 }
 
 type JobServiceImpl struct {

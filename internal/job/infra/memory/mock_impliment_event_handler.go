@@ -1,7 +1,7 @@
 package memory
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/rattapon001/porter-management/pkg"
 )
@@ -14,6 +14,6 @@ func NewMockImplimentEventHandler() *MockImplimentEventHandler {
 }
 
 func (h *MockImplimentEventHandler) Publish(event []pkg.Event) error {
-	fmt.Printf("Publish event: %v\n", event[len(event)-1])
+	log.Printf("Publish event: %v\n", event[len(event)-1])
 	return nil
 }
