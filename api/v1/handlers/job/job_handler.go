@@ -1,6 +1,9 @@
 package job_handler
 
 import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 	"github.com/rattapon001/porter-management/internal/job/app"
 	"github.com/rattapon001/porter-management/internal/job/domain"
 )
@@ -15,18 +18,29 @@ func NewJobHandler(jobService app.JobService) *JobHandler {
 	}
 }
 
-func (h *JobHandler) CreatedNewJob(location domain.Location, patient domain.Patient) error {
-	_, err := h.JobService.CreatedNewJob(location, patient)
-	if err != nil {
-		return err
+func (h *JobHandler) CreatedNewJob(c *gin.Context) {
+	var job domain.Job
+	if err := c.ShouldBindJSON(&job); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-	return nil
+	location := domain.Location{
+		From: job.Location.From,
+		To:   job.Location.To,
+	}
+	patient := domain.Patient{
+		Name: job.Patient.Name,
+		HN:   job.Patient.HN,
+	}
+
+	newJob, err := h.JobService.CreatedNewJob(location, patient)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, newJob)
 }
 
-func (h *JobHandler) AcceptedJob(id string, porter domain.Porter) error {
-	_, err := h.JobService.AcceptedJob(id, porter)
-	if err != nil {
-		return err
-	}
-	return nil
+func (h *JobHandler) AcceptedJob(c *gin.Context) {
+
 }
