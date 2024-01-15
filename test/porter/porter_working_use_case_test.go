@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestJobAvailable(t *testing.T) {
+func TestPorterWorking(t *testing.T) {
 	assert := assert.New(t)
 	porter, err := domain.CreatedNewPorter("porter1", "code-001", "token")
 	assert.NoError(err, "should not return an error")
@@ -25,6 +25,8 @@ func TestJobAvailable(t *testing.T) {
 		Repo:      mockRepo,
 		Publisher: mockPublisher,
 	}
-	err = porterService.ReadyForJob(porter.ID)
+	porter, err = porterService.PorterWorking(porter.ID)
 	assert.NoError(err, "should not return an error")
+	assert.Equal(porter.Name, "porter1", "should return porter1")
+	assert.Equal(porter.Status, domain.PorterStatusWorking, "should return working")
 }

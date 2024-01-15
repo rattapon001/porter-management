@@ -8,8 +8,10 @@ import (
 
 type PorterService interface {
 	CreatedNewPorter(name string, token string) (*domain.Porter, error)
-	ReadyForJob(ID domain.PorterId) error
-	PorterAllowcated(payload domain.Job) error
+	PorterAllowcated(payload domain.Job) (*domain.Porter, error)
+	PorterWorking(ID domain.PorterId) (*domain.Porter, error)
+	PorterAvailable(ID domain.PorterId) (*domain.Porter, error)
+	PorterUnavailable(ID domain.PorterId) (*domain.Porter, error)
 }
 
 type PorterServiceImpl struct {

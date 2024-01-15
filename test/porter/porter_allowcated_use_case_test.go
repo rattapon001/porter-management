@@ -43,6 +43,7 @@ func TestPorterAllowcated(t *testing.T) {
 		Location: location,
 		Patient:  patient,
 	}
-	err := porterService.PorterAllowcated(job)
+	porter, err := porterService.PorterAllowcated(job)
 	assert.NoError(err, "should not return an error")
+	assert.Equal(porter.Name, "porter1", "should return porter1")
 }

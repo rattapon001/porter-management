@@ -34,7 +34,7 @@ func CreatedNewPorter(name string, porterCode string, token string) (*Porter, er
 	}, nil
 }
 
-func (p *Porter) AcceptJob() {
+func (p *Porter) Working() {
 	p.Status = PorterStatusWorking
 }
 

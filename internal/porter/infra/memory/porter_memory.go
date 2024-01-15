@@ -44,3 +44,12 @@ func (r *PorterMemoryRepository) FindByID(id domain.PorterId) *domain.Porter {
 	}
 	return nil
 }
+
+func (r *PorterMemoryRepository) FindByCode(code string) *domain.Porter {
+	for _, p := range r.porters {
+		if p.PorterCode == code {
+			return p
+		}
+	}
+	return nil
+}

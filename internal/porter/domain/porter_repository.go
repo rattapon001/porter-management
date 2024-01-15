@@ -5,4 +5,5 @@ type PorterRepository interface {
 	Update(porter *Porter) error
 	FindAvailablePorter() *Porter
 	FindByID(id PorterId) *Porter
+	FindByCode(code string) *Porter
 }

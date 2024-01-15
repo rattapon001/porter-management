@@ -5,19 +5,18 @@ import (
 	"github.com/rattapon001/porter-management/pkg"
 )
 
-func (s *PorterServiceImpl) PorterAllowcated(payload domain.Job) error {
+func (s *PorterServiceImpl) PorterAllowcated(payload domain.Job) (*domain.Porter, error) {
 	availablePorter := s.Repo.FindAvailablePorter()
 	if availablePorter == nil {
-		return nil
+		return nil, nil
 	}
 	NotiPayload := pkg.NotificationPayload{
 		JobId:   string(payload.ID),
 		Version: payload.Version,
 		Message: "Job created " + payload.Location.From + " to " + payload.Location.To + " for " + payload.Patient.Name,
 	}
-	err := s.Noti.Notify(availablePorter.Token, NotiPayload)
-	if err != nil {
-		return err
+	if err := s.Noti.Notify(availablePorter.Token, NotiPayload); err != nil {
+		return nil, err
 	}
-	return nil
+	return availablePorter, nil
 }

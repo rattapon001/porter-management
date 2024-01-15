@@ -34,6 +34,11 @@ func (m *MockRepository) FindByID(id domain.PorterId) *domain.Porter {
 	return args.Get(0).(*domain.Porter)
 }
 
+func (m *MockRepository) FindByCode(code string) *domain.Porter {
+	args := m.Called(code)
+	return args.Get(0).(*domain.Porter)
+}
+
 type MockEventHandler struct {
 	mock.Mock
 }
