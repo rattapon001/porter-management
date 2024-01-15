@@ -10,27 +10,30 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestAcceptedJob(t *testing.T) {
+func TestStartedJob(t *testing.T) {
 	assert := assert.New(t)
 
 	mockRepo := new(MockRepository)
-	mockRepo.On("Update", mock.AnythingOfType("*domain.Job")).Return(nil)
 	mockRepo.On("FindById", mock.AnythingOfType("domain.JobId")).Return(&domain.Job{
-		Status: domain.JobStatusPending,
+		Status: domain.JobStatusAccepted,
 		Aggregate: domain.Aggregate{
 			Events: []pkg.Event{
-				jobCreatedEvent,
+				jobCreatedEvent, jobAcceptedEvent,
 			},
 		},
 	}, nil)
+	mockRepo.On("Update", mock.AnythingOfType("*domain.Job")).Return(nil)
+
 	mockPublisher := new(MockEventHandler)
 	mockPublisher.On("Publish", mock.AnythingOfType("[]pkg.Event")).Return(nil)
 	jobService := app.JobServiceImpl{
 		Repo:      mockRepo,
 		Publisher: mockPublisher,
 	}
-	acceptedJob, err := jobService.AcceptedJob("1", porter)
+
+	startedJob, err := jobService.StartedJob("1")
 	assert.NoError(err, "should not return an error")
-	assert.Equal(domain.JobStatusAccepted, acceptedJob.Status, "accepted job status should be accepted")
-	assert.Equal(2, len(acceptedJob.Aggregate.Events), "accepted job should have 2 events")
+	assert.Equal(domain.JobStatusWorking, startedJob.Status, "started job status should be started")
+	assert.Equal(3, len(startedJob.Aggregate.Events), "started job should have 3 events")
+
 }
