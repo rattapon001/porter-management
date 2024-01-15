@@ -1,5 +1,7 @@
 package app
 
-func (m *NotificationServiceImpl) Notify(token string, payload string) error {
+import "github.com/rattapon001/porter-management/pkg"
+
+func (m *NotificationServiceImpl) Notify(token string, payload pkg.NotificationPayload) error {
 	return nil
 }

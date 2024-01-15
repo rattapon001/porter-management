@@ -1,7 +1,9 @@
 package app
 
+import "github.com/rattapon001/porter-management/pkg"
+
 type NotificationService interface {
-	Notify(token, payload string) error
+	Notify(token string, payload pkg.NotificationPayload) error
 }
 
 type NotificationServiceImpl struct {
