@@ -16,3 +16,12 @@ func (r *JobMemoryRepository) Save(job *domain.Job) error {
 	r.jobs = append(r.jobs, job)
 	return nil
 }
+
+func (r *JobMemoryRepository) FindById(id domain.JobId) (*domain.Job, error) {
+	for _, job := range r.jobs {
+		if job.ID == id {
+			return job, nil
+		}
+	}
+	return nil, nil
+}
