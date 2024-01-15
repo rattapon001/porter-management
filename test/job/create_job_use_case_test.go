@@ -19,6 +19,11 @@ func (m *MockRepository) Save(job *domain.Job) error {
 	return args.Error(0)
 }
 
+func (m *MockRepository) FindById(id domain.JobId) (*domain.Job, error) {
+	args := m.Called(id)
+	return args.Get(0).(*domain.Job), args.Error(1)
+}
+
 type MockEventHandler struct {
 	mock.Mock
 }
