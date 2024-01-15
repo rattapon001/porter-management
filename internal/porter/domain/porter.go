@@ -27,12 +27,14 @@ func CreatedNewPorter(name string, code string, token string) (*Porter, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Porter{
+	porter := Porter{
 		ID:     PorterId(ID.String()),
 		Name:   name,
 		Code:   PorterCode(code),
 		Status: PorterStatusUnavailable,
-	}, nil
+	}
+	porter.InvokedToken(token)
+	return &porter, nil
 }
 
 func (p *Porter) Working() {

@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	job_router "github.com/rattapon001/porter-management/api/v1/routers/job"
+	porter_router "github.com/rattapon001/porter-management/api/v1/routers/porter"
 )
 
 func main() {
@@ -14,5 +15,6 @@ func main() {
 		})
 	})
 	job_router.InitJobRouter(router)
+	porter_router.InitPorterRouter(router)
 	router.Run(port)
 }
