@@ -17,4 +17,5 @@ type Job struct {
 	Version  int
 	Patient  Patient
 	Location Location
+	Porter   Porter
 }

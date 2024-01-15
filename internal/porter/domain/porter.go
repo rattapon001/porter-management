@@ -12,14 +12,14 @@ const (
 )
 
 type Porter struct {
-	ID         PorterId
-	Name       string
-	PorterCode string
-	Status     PorterStatus
-	Token      string
+	ID     PorterId
+	Name   string
+	Code   string
+	Status PorterStatus
+	Token  string
 }
 
-func CreatedNewPorter(name string, porterCode string, token string) (*Porter, error) {
+func CreatedNewPorter(name string, code string, token string) (*Porter, error) {
 
 	ID, err := uuid.NewUUID()
 
@@ -27,10 +27,10 @@ func CreatedNewPorter(name string, porterCode string, token string) (*Porter, er
 		return nil, err
 	}
 	return &Porter{
-		ID:         PorterId(ID.String()),
-		Name:       name,
-		PorterCode: porterCode,
-		Status:     PorterStatusUnavailable,
+		ID:     PorterId(ID.String()),
+		Name:   name,
+		Code:   code,
+		Status: PorterStatusUnavailable,
 	}, nil
 }
 
