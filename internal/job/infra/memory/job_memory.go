@@ -1,6 +1,9 @@
 package memory
 
-import "github.com/rattapon001/porter-management/internal/job/domain"
+import (
+	"github.com/rattapon001/porter-management/internal/job/domain"
+	"github.com/rattapon001/porter-management/internal/job/infra/memory/errors"
+)
 
 type JobMemoryRepository struct {
 	jobs []*domain.Job
@@ -30,7 +33,7 @@ func (r *JobMemoryRepository) Update(job *domain.Job) error {
 	for i, j := range r.jobs {
 		if j.ID == job.ID {
 			if j.Version != job.Version {
-				return ErrVersionMismatch
+				return errors.ErrVersionMismatch
 			}
 			job.Version++
 			r.jobs[i] = job
