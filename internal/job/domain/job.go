@@ -92,6 +92,15 @@ func (j *Job) StartedJob() {
 	j.JobStartedEvent()
 }
 
+func (j *Job) CompletedJob() {
+	if j.Status != JobStatusWorking {
+		return
+	}
+	j.CheckOutJob()
+	j.Status = JobStatusCompleted
+	j.JobCompletedEvent()
+}
+
 func (j *Job) CheckInJob() {
 	j.CheckIn = time.Now()
 }
@@ -125,4 +134,18 @@ func (j *Job) JobStartedEvent() {
 		"check_in": j.CheckIn,
 	}
 	j.Aggregate.AppendEvent(JobEventWorking, payload)
+}
+
+func (j *Job) JobCompletedEvent() {
+	payload := map[string]interface{}{
+		"job_id":    j.ID,
+		"version":   j.Version + 1,
+		"status":    j.Status,
+		"location":  j.Location,
+		"patient":   j.Patient,
+		"porter":    j.Porter,
+		"check_in":  j.CheckIn,
+		"check_out": j.CheckOut,
+	}
+	j.Aggregate.AppendEvent(JobEventCompleted, payload)
 }

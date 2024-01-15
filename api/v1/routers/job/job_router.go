@@ -18,6 +18,7 @@ func InitJobRouter(router *gin.Engine) {
 		jobRouter.POST("/", JobHandler.CreatedNewJob)
 		jobRouter.POST("/:id/accepted", JobHandler.AcceptedJob)
 		jobRouter.POST("/:id/started", JobHandler.StartedJob)
+		jobRouter.POST("/:id/completed", JobHandler.CompletedJob)
 		jobRouter.GET("/:id", JobHandler.FindJobById)
 	}
 }

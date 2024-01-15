@@ -2,6 +2,7 @@ package job_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/rattapon001/porter-management/internal/job/domain"
@@ -44,6 +45,19 @@ var jobAcceptedEvent = pkg.Event{
 		"location": location,
 		"patient":  patient,
 		"porter":   porter,
+	},
+}
+
+var jobStartedEvent = pkg.Event{
+	EventName: domain.JobEventCreated,
+	Payload: map[string]interface{}{
+		"job_id":   uuid.New().String(),
+		"version":  3,
+		"status":   domain.JobStatusWorking,
+		"location": location,
+		"patient":  patient,
+		"porter":   porter,
+		"check_in": time.Now(),
 	},
 }
 

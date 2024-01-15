@@ -70,6 +70,17 @@ func (h *JobHandler) StartedJob(c *gin.Context) {
 	c.JSON(http.StatusOK, job)
 }
 
+func (h *JobHandler) CompletedJob(c *gin.Context) {
+	id := c.Param("id")
+	jobId := domain.JobId(id)
+	job, err := h.JobService.CompletedJob(jobId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, job)
+}
+
 func (h *JobHandler) FindJobById(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
