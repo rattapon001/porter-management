@@ -17,6 +17,6 @@ func InitPorterRouter(router *gin.Engine) {
 	porterRouter := router.Group("/porters")
 	{
 		porterRouter.POST("/", porterHandler.CreatedNewPorter)
+		porterRouter.PUT("/:code/available", porterHandler.PorterAvailable)
 	}
-
 }
