@@ -13,8 +13,7 @@ func (s *JobServiceImpl) CreatedNewJob(location domain.Location, patient domain.
 	if err != nil {
 		return nil, err
 	}
-	err = s.Publisher.Publish(job.Aggregate.Events)
-	if err != nil {
+	if err := s.Publisher.Publish(job.Aggregate.Events); err != nil {
 		return nil, err
 	}
 	return job, nil

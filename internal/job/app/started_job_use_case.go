@@ -8,12 +8,10 @@ func (s *JobServiceImpl) StartedJob(id domain.JobId) (*domain.Job, error) {
 		return nil, err
 	}
 	job.StartedJob()
-	err = s.Repo.Update(job)
-	if err != nil {
+	if err := s.Repo.Update(job); err != nil {
 		return nil, err
 	}
-	err = s.Publisher.Publish(job.Aggregate.Events)
-	if err != nil {
+	if err := s.Publisher.Publish(job.Aggregate.Events); err != nil {
 		return nil, err
 	}
 	return job, nil
