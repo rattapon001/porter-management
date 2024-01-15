@@ -62,6 +62,28 @@ func CreatedNewJob(location Location, patient Patient) (*Job, error) {
 	return job, nil
 }
 
+func (j *Job) AcceptJob(porter Porter) {
+	j.Status = Accepted
+	j.Accepted = true
+	j.Porter = porter
+	j.JobAcceptedEvent()
+}
+
+func (j *Job) JobAcceptedEvent() {
+	event := pkg.Event{
+		EventName: JobAccepted,
+		Payload: map[string]interface{}{
+			"job_id":   j.ID,
+			"version":  j.Version,
+			"status":   j.Status,
+			"location": j.Location,
+			"patient":  j.Patient,
+			"porter":   j.Porter,
+		},
+	}
+	j.Aggregate.AppendEvent(JobAccepted, event)
+}
+
 func (j *Job) JobCreatedEvent() {
 	event := pkg.Event{
 		EventName: JobCreated,
