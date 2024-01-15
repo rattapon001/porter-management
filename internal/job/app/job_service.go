@@ -7,6 +7,7 @@ import (
 
 type JobService interface {
 	CreatedNewJob(location domain.Location, patient domain.Patient) (*domain.Job, error)
+	AcceptedJob(id string, porter domain.Porter) (*domain.Job, error)
 }
 
 type JobServiceImpl struct {

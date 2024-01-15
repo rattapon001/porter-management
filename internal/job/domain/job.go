@@ -11,10 +11,10 @@ type JobId string
 type JobStatus string
 
 const (
-	JobStatusPending JobStatus = "pending"
-	Accepted         JobStatus = "accepted"
-	Working          JobStatus = "working"
-	Completed        JobStatus = "completed"
+	JobStatusPending   JobStatus = "pending"
+	JobStatusAccepted  JobStatus = "accepted"
+	JobStatusWorking   JobStatus = "working"
+	JobStatusCompleted JobStatus = "completed"
 )
 
 type Location struct {
@@ -53,7 +53,7 @@ func CreatedNewJob(location Location, patient Patient) (*Job, error) {
 	}
 	job := &Job{
 		ID:       JobId(ID.String()),
-		Version:  1,
+		Version:  0,
 		Status:   JobStatusPending,
 		Location: location,
 		Patient:  patient,
@@ -62,8 +62,8 @@ func CreatedNewJob(location Location, patient Patient) (*Job, error) {
 	return job, nil
 }
 
-func (j *Job) AcceptJob(porter Porter) {
-	j.Status = Accepted
+func (j *Job) AcceptedJob(porter Porter) {
+	j.Status = JobStatusAccepted
 	j.Accepted = true
 	j.Porter = porter
 	j.JobAcceptedEvent()
@@ -71,7 +71,7 @@ func (j *Job) AcceptJob(porter Porter) {
 
 func (j *Job) JobAcceptedEvent() {
 	event := pkg.Event{
-		EventName: JobAccepted,
+		EventName: JobEventAccepted,
 		Payload: map[string]interface{}{
 			"job_id":   j.ID,
 			"version":  j.Version,
@@ -81,12 +81,12 @@ func (j *Job) JobAcceptedEvent() {
 			"porter":   j.Porter,
 		},
 	}
-	j.Aggregate.AppendEvent(JobAccepted, event)
+	j.Aggregate.AppendEvent(JobEventAccepted, event)
 }
 
 func (j *Job) JobCreatedEvent() {
 	event := pkg.Event{
-		EventName: JobCreated,
+		EventName: JobEventCreated,
 		Payload: map[string]interface{}{
 			"job_id":   j.ID,
 			"version":  j.Version,
@@ -95,5 +95,5 @@ func (j *Job) JobCreatedEvent() {
 			"patient":  j.Patient,
 		},
 	}
-	j.Aggregate.AppendEvent(JobCreated, event)
+	j.Aggregate.AppendEvent(JobEventCreated, event)
 }

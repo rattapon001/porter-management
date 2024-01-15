@@ -25,3 +25,17 @@ func (r *JobMemoryRepository) FindById(id domain.JobId) (*domain.Job, error) {
 	}
 	return nil, nil
 }
+
+func (r *JobMemoryRepository) Update(job *domain.Job) error {
+	for i, j := range r.jobs {
+		if j.ID == job.ID {
+			if j.Version != job.Version {
+				return ErrVersionMismatch
+			}
+			job.Version++
+			r.jobs[i] = job
+			return nil
+		}
+	}
+	return nil
+}
