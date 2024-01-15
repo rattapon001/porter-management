@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/rattapon001/porter-management/pkg"
 )
 
 type JobId string
@@ -74,30 +73,26 @@ func (j *Job) AcceptedJob(porter Porter) {
 }
 
 func (j *Job) JobAcceptedEvent() {
-	event := pkg.Event{
-		EventName: JobEventAccepted,
-		Payload: map[string]interface{}{
-			"job_id":   j.ID,
-			"version":  j.Version,
-			"status":   j.Status,
-			"location": j.Location,
-			"patient":  j.Patient,
-			"porter":   j.Porter,
-		},
+
+	payload := map[string]interface{}{
+		"job_id":   j.ID,
+		"version":  j.Version + 1,
+		"status":   j.Status,
+		"location": j.Location,
+		"patient":  j.Patient,
+		"porter":   j.Porter,
 	}
-	j.Aggregate.AppendEvent(JobEventAccepted, event)
+	j.Aggregate.AppendEvent(JobEventAccepted, payload)
 }
 
 func (j *Job) JobCreatedEvent() {
-	event := pkg.Event{
-		EventName: JobEventCreated,
-		Payload: map[string]interface{}{
-			"job_id":   j.ID,
-			"version":  j.Version,
-			"status":   j.Status,
-			"location": j.Location,
-			"patient":  j.Patient,
-		},
+
+	payload := map[string]interface{}{
+		"job_id":   j.ID,
+		"version":  j.Version,
+		"status":   j.Status,
+		"location": j.Location,
+		"patient":  j.Patient,
 	}
-	j.Aggregate.AppendEvent(JobEventCreated, event)
+	j.Aggregate.AppendEvent(JobEventCreated, payload)
 }
