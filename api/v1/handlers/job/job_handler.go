@@ -44,3 +44,15 @@ func (h *JobHandler) CreatedNewJob(c *gin.Context) {
 func (h *JobHandler) AcceptedJob(c *gin.Context) {
 
 }
+
+func (h *JobHandler) FindJobById(c *gin.Context) {
+	id := c.Param("id")
+	jobId := domain.JobId(id)
+
+	job, err := h.JobService.FindJobById(jobId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, job)
+}
