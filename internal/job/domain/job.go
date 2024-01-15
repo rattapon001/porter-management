@@ -63,6 +63,9 @@ func CreatedNewJob(location Location, patient Patient) (*Job, error) {
 }
 
 func (j *Job) AcceptedJob(porter Porter) {
+	if j.Status != JobStatusPending {
+		return
+	}
 	j.Status = JobStatusAccepted
 	j.Accepted = true
 	j.Porter = porter
