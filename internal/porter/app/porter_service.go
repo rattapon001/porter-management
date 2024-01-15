@@ -9,7 +9,7 @@ import (
 type PorterService interface {
 	CreatedNewPorter(name string, token string) (*domain.Porter, error)
 	ReadyForJob(ID domain.PorterId) error
-	PorterAllowcated(payload JobCreatedEvent) error
+	PorterAllowcated(payload domain.Job) error
 }
 
 type PorterServiceImpl struct {

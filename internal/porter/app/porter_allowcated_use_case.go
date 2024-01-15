@@ -1,19 +1,19 @@
 package app
 
-import "github.com/rattapon001/porter-management/pkg"
+import (
+	"github.com/rattapon001/porter-management/internal/porter/domain"
+	"github.com/rattapon001/porter-management/pkg"
+)
 
-type JobCreatedEvent struct {
-	JobId string
-}
-
-func (s *PorterServiceImpl) PorterAllowcated(payload JobCreatedEvent) error {
+func (s *PorterServiceImpl) PorterAllowcated(payload domain.Job) error {
 	availablePorter := s.Repo.FindAvailablePorter()
 	if availablePorter == nil {
 		return nil
 	}
 	NotiPayload := pkg.NotificationPayload{
-		JobId:   payload.JobId,
-		Message: "Your job is ready",
+		JobId:   string(payload.ID),
+		Version: payload.Version,
+		Message: "Job created " + payload.Location.From + " to " + payload.Location.To + " for " + payload.Patient.Name,
 	}
 	err := s.Noti.Notify(availablePorter.Token, NotiPayload)
 	if err != nil {
