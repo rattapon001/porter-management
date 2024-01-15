@@ -42,7 +42,20 @@ func (h *JobHandler) CreatedNewJob(c *gin.Context) {
 }
 
 func (h *JobHandler) AcceptedJob(c *gin.Context) {
+	var porter domain.Porter
+	if err := c.ShouldBindJSON(&porter); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	id := c.Param("id")
+	jobId := domain.JobId(id)
 
+	job, err := h.JobService.AcceptedJob(jobId, porter)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, job)
 }
 
 func (h *JobHandler) FindJobById(c *gin.Context) {
