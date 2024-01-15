@@ -4,6 +4,7 @@ import "github.com/google/uuid"
 
 type PorterId string
 type PorterStatus string
+type PorterCode string
 
 const (
 	PorterStatusAvailable   PorterStatus = "available"
@@ -14,7 +15,7 @@ const (
 type Porter struct {
 	ID     PorterId
 	Name   string
-	Code   string
+	Code   PorterCode
 	Status PorterStatus
 	Token  string
 }
@@ -29,7 +30,7 @@ func CreatedNewPorter(name string, code string, token string) (*Porter, error) {
 	return &Porter{
 		ID:     PorterId(ID.String()),
 		Name:   name,
-		Code:   code,
+		Code:   PorterCode(code),
 		Status: PorterStatusUnavailable,
 	}, nil
 }

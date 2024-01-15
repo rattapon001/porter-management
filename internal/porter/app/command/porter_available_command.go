@@ -13,7 +13,7 @@ type PorterAvailableCommand struct {
 func (p *PorterAvailableCommand) Execute(event interface{}) {
 	if eventData, ok := event.(pkg.Event); ok {
 		if eventPayload, ok := eventData.Payload.(domain.Job); ok {
-			p.PorterService.PorterAvailable(domain.PorterId(eventPayload.Porter.Code))
+			p.PorterService.PorterAvailable(domain.PorterCode(eventPayload.Porter.Code))
 		}
 	}
 }
