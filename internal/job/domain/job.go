@@ -53,7 +53,7 @@ func CreatedNewJob(location Location, patient Patient) (*Job, error) {
 	}
 	job := &Job{
 		ID:       JobId(ID.String()),
-		Version:  0,
+		Version:  1,
 		Status:   JobStatusPending,
 		Location: location,
 		Patient:  patient,
@@ -69,6 +69,7 @@ func (j *Job) AcceptedJob(porter Porter) {
 	j.Status = JobStatusAccepted
 	j.Accepted = true
 	j.Porter = porter
+	j.CheckIn = time.Now()
 	j.JobAcceptedEvent()
 }
 
