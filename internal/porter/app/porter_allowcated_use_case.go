@@ -11,12 +11,13 @@ func (s *PorterServiceImpl) PorterAllowcated(payload JobCreatedEvent) error {
 	if availablePorter == nil {
 		return nil
 	}
-
 	NotiPayload := pkg.NotificationPayload{
 		JobId:   payload.JobId,
 		Message: "Your job is ready",
 	}
-
-	s.Noti.Notify(availablePorter.Token, NotiPayload)
+	err := s.Noti.Notify(availablePorter.Token, NotiPayload)
+	if err != nil {
+		return err
+	}
 	return nil
 }
