@@ -7,7 +7,9 @@ func (s *JobUseCaseImpl) StartJob(id domain.JobId) (*domain.Job, error) {
 	if err != nil {
 		return nil, err
 	}
-	job.Start()
+	if err := job.Start(); err != nil {
+		return nil, err
+	}
 	if err := s.Repo.Update(job); err != nil {
 		return nil, err
 	}

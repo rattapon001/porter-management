@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	domain_errors "github.com/rattapon001/porter-management/internal/job/domain/errors"
 )
 
 type JobId string
@@ -73,32 +74,35 @@ func (j *Job) JobCreatedEvent() {
 	j.Aggregate.AppendEvent(JobCreatedEvent, payload)
 }
 
-func (j *Job) Accept(porter Porter) {
+func (j *Job) Accept(porter Porter) error {
 	if j.Status != JobPendingStatus {
-		return
+		return domain_errors.CannotAcceptJob
 	}
 	j.Status = JobAcceptedStatus
 	j.Accepted = true
 	j.Porter = porter
 	j.JobAcceptedEvent()
+	return nil
 }
 
-func (j *Job) Start() {
+func (j *Job) Start() error {
 	if j.Status != JobAcceptedStatus {
-		return
+		return domain_errors.CannotStartJob
 	}
 	j.CheckIn = time.Now()
 	j.Status = JobWorkingStatus
 	j.JobStartedEvent()
+	return nil
 }
 
-func (j *Job) Complete() {
+func (j *Job) Complete() error {
 	if j.Status != JobWorkingStatus {
-		return
+		return domain_errors.CannotCompleteJob
 	}
 	j.CheckOut = time.Now()
 	j.Status = JobCompletedStatus
 	j.JobCompletedEvent()
+	return nil
 }
 
 func (j *Job) JobAcceptedEvent() {

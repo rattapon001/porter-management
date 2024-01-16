@@ -7,7 +7,10 @@ func (s *JobUseCaseImpl) AcceptJob(id domain.JobId, porter domain.Porter) (*doma
 	if err != nil {
 		return nil, err
 	}
-	job.Accept(porter)
+	if err := job.Accept(porter); err != nil {
+		return nil, err
+	}
+
 	if err := s.Repo.Update(job); err != nil {
 		return nil, err
 	}
