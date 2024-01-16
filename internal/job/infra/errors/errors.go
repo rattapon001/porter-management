@@ -1,4 +1,4 @@
-package errors
+package infra_errors
 
 import "errors"
 
