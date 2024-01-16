@@ -44,7 +44,7 @@ func TestCreateNewJobUseCase(t *testing.T) {
 	mockRepo.On("Save", mock.AnythingOfType("*domain.Job")).Return(nil)
 	mockPublisher := new(MockEventHandler)
 	mockPublisher.On("Publish", mock.AnythingOfType("[]pkg.Event")).Return(nil)
-	jobService := app.JobServiceImpl{
+	JobUseCase := app.JobUseCaseImpl{
 		Repo:      mockRepo,
 		Publisher: mockPublisher,
 	}
@@ -58,7 +58,7 @@ func TestCreateNewJobUseCase(t *testing.T) {
 	}
 
 	// publisher := mockPublisher
-	createdJob, err := jobService.CreateNewJob(location, patient)
+	createdJob, err := JobUseCase.CreateNewJob(location, patient)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.JobStatusPending, createdJob.Status, "created job status should be pending")
 	assert.Equal(1, len(createdJob.Aggregate.Events), "created job should have 1 event")

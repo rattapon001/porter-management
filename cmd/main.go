@@ -22,8 +22,8 @@ func main() {
 	// Init Job Router
 	jobRepository := job_memory.NewJobMemoryRepository()
 	publisher := job_memory.NewMockImplimentEventHandler()
-	JobService := job_app.NewJobService(jobRepository, publisher)
-	job_router.InitJobRouter(router, JobService)
+	JobUseCase := job_app.NewJobUseCase(jobRepository, publisher)
+	job_router.InitJobRouter(router, JobUseCase)
 
 	// Init Porter Router
 	porterRepository := porter_memory.NewPorterMemoryRepository()

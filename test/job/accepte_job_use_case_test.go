@@ -25,11 +25,11 @@ func TestAcceptJobUseCase(t *testing.T) {
 	}, nil)
 	mockPublisher := new(MockEventHandler)
 	mockPublisher.On("Publish", mock.AnythingOfType("[]pkg.Event")).Return(nil)
-	jobService := app.JobServiceImpl{
+	JobUseCase := app.JobUseCaseImpl{
 		Repo:      mockRepo,
 		Publisher: mockPublisher,
 	}
-	acceptedJob, err := jobService.AcceptJob("1", porter)
+	acceptedJob, err := JobUseCase.AcceptJob("1", porter)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.JobStatusAccepted, acceptedJob.Status, "accepted job status should be accepted")
 	assert.Equal(2, len(acceptedJob.Aggregate.Events), "accepted job should have 2 events")

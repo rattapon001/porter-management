@@ -2,7 +2,7 @@ package app
 
 import "github.com/rattapon001/porter-management/internal/job/domain"
 
-func (s *JobServiceImpl) CompleteJob(id domain.JobId) (*domain.Job, error) {
+func (s *JobUseCaseImpl) CompleteJob(id domain.JobId) (*domain.Job, error) {
 	job, err := s.Repo.FindById(domain.JobId(id))
 	if err != nil {
 		return nil, err

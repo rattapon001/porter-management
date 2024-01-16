@@ -9,12 +9,12 @@ import (
 )
 
 type JobHandler struct {
-	JobService app.JobService
+	JobUseCase app.JobUseCase
 }
 
-func NewJobHandler(jobService app.JobService) *JobHandler {
+func NewJobHandler(JobUseCase app.JobUseCase) *JobHandler {
 	return &JobHandler{
-		JobService: jobService,
+		JobUseCase: JobUseCase,
 	}
 }
 
@@ -33,7 +33,7 @@ func (h *JobHandler) CreateNewJob(c *gin.Context) {
 		HN:   job.Patient.HN,
 	}
 
-	newJob, err := h.JobService.CreateNewJob(location, patient)
+	newJob, err := h.JobUseCase.CreateNewJob(location, patient)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -50,7 +50,7 @@ func (h *JobHandler) AcceptJob(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
 
-	job, err := h.JobService.AcceptJob(jobId, porter)
+	job, err := h.JobUseCase.AcceptJob(jobId, porter)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -62,7 +62,7 @@ func (h *JobHandler) StartJob(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
 
-	job, err := h.JobService.StartJob(jobId)
+	job, err := h.JobUseCase.StartJob(jobId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -73,7 +73,7 @@ func (h *JobHandler) StartJob(c *gin.Context) {
 func (h *JobHandler) CompleteJob(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
-	job, err := h.JobService.CompleteJob(jobId)
+	job, err := h.JobUseCase.CompleteJob(jobId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -85,7 +85,7 @@ func (h *JobHandler) FindJobById(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
 
-	job, err := h.JobService.FindJobById(jobId)
+	job, err := h.JobUseCase.FindJobById(jobId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

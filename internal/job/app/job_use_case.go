@@ -5,7 +5,7 @@ import (
 	"github.com/rattapon001/porter-management/internal/job/domain"
 )
 
-type JobService interface {
+type JobUseCase interface {
 	CreateNewJob(location domain.Location, patient domain.Patient) (*domain.Job, error)
 	AcceptJob(id domain.JobId, porter domain.Porter) (*domain.Job, error)
 	FindJobById(id domain.JobId) (*domain.Job, error)
@@ -13,13 +13,13 @@ type JobService interface {
 	CompleteJob(id domain.JobId) (*domain.Job, error)
 }
 
-type JobServiceImpl struct {
+type JobUseCaseImpl struct {
 	Repo      domain.JobRepository
 	Publisher event.EventHandler
 }
 
-func NewJobService(repo domain.JobRepository, publisher event.EventHandler) JobService {
-	return &JobServiceImpl{
+func NewJobUseCase(repo domain.JobRepository, publisher event.EventHandler) JobUseCase {
+	return &JobUseCaseImpl{
 		Repo:      repo,
 		Publisher: publisher,
 	}

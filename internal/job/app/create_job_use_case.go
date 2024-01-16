@@ -4,7 +4,7 @@ import (
 	"github.com/rattapon001/porter-management/internal/job/domain"
 )
 
-func (s *JobServiceImpl) CreateNewJob(location domain.Location, patient domain.Patient) (*domain.Job, error) {
+func (s *JobUseCaseImpl) CreateNewJob(location domain.Location, patient domain.Patient) (*domain.Job, error) {
 	job, err := domain.NewJob(location, patient)
 	if err != nil {
 		return nil, err

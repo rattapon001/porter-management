@@ -6,8 +6,8 @@ import (
 	"github.com/rattapon001/porter-management/internal/job/app"
 )
 
-func InitJobRouter(router *gin.Engine, JobService app.JobService) {
-	JobHandler := job_handler.NewJobHandler(JobService)
+func InitJobRouter(router *gin.Engine, JobUseCase app.JobUseCase) {
+	JobHandler := job_handler.NewJobHandler(JobUseCase)
 
 	jobRouter := router.Group("/jobs")
 	{
