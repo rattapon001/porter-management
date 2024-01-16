@@ -12,7 +12,7 @@ func (s *JobUseCaseImpl) CompleteJob(id domain.JobId) (*domain.Job, error) {
 		return nil, err
 	}
 
-	if err := s.Repo.Update(job); err != nil {
+	if err := s.Repo.Save(job); err != nil {
 		return nil, err
 	}
 

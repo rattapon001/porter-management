@@ -18,31 +18,31 @@ const (
 )
 
 type Location struct {
-	From string `bson:"from"`
-	To   string `bson:"to"`
+	From string
+	To   string
 }
 
 type Patient struct {
-	Name string `bson:"name"`
-	HN   string `bson:"hn"`
+	Name string
+	HN   string
 }
 
 type Porter struct {
-	Code string `bson:"code"`
-	Name string `bson:"name"`
+	Code string
+	Name string
 }
 
 type Job struct {
-	ID        JobId     `bson:"_id,omitempty"`
-	Version   int       `bson:"version"`
-	Status    JobStatus `bson:"status"`
-	Accepted  bool      `bson:"accepted"`
-	Location  Location  `bson:"location"`
-	Patient   Patient   `bson:"patient"`
-	Porter    Porter    `bson:"porter"`
-	CheckIn   time.Time `bson:"check_in"`
-	CheckOut  time.Time `bson:"check_out"`
-	Aggregate Aggregate `bson:"aggregate"`
+	ID        JobId `gorm:"primaryKey"`
+	Version   int
+	Status    JobStatus
+	Accepted  bool
+	Location  Location `gorm:"type:jsonb"`
+	Patient   Patient  `gorm:"type:jsonb"`
+	Porter    Porter   `gorm:"type:jsonb"`
+	CheckIn   time.Time
+	CheckOut  time.Time
+	Aggregate Aggregate `gorm:"type:jsonb"`
 }
 
 func NewJob(location Location, patient Patient) (*Job, error) {

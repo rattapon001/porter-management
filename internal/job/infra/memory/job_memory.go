@@ -16,6 +16,16 @@ func NewJobMemoryRepository() *JobMemoryRepository {
 }
 
 func (r *JobMemoryRepository) Save(job *domain.Job) error {
+	for i, existingJob := range r.jobs {
+		if existingJob.ID == job.ID {
+			if existingJob.Version != job.Version {
+				return infraErrors.ErrVersionMismatch
+			}
+			job.Version++
+			r.jobs[i] = job
+			return nil
+		}
+	}
 	r.jobs = append(r.jobs, job)
 	return nil
 }
@@ -27,18 +37,4 @@ func (r *JobMemoryRepository) FindById(id domain.JobId) (*domain.Job, error) {
 		}
 	}
 	return nil, nil
-}
-
-func (r *JobMemoryRepository) Update(job *domain.Job) error {
-	for i, j := range r.jobs {
-		if j.ID == job.ID {
-			if j.Version != job.Version {
-				return infraErrors.ErrVersionMismatch
-			}
-			job.Version++
-			r.jobs[i] = job
-			return nil
-		}
-	}
-	return nil
 }

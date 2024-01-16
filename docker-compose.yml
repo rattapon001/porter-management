@@ -1,0 +1,15 @@
+version: "3.5"
+
+services:
+  db:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=porter_management_db
+
+networks:
+  default:
+    name: MyNetwork

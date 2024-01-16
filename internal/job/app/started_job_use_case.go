@@ -10,7 +10,7 @@ func (s *JobUseCaseImpl) StartJob(id domain.JobId) (*domain.Job, error) {
 	if err := job.Start(); err != nil {
 		return nil, err
 	}
-	if err := s.Repo.Update(job); err != nil {
+	if err := s.Repo.Save(job); err != nil {
 		return nil, err
 	}
 	if err := s.Publisher.Publish(job.Aggregate.Events); err != nil {

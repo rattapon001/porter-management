@@ -11,7 +11,7 @@ func (s *JobUseCaseImpl) AcceptJob(id domain.JobId, porter domain.Porter) (*doma
 		return nil, err
 	}
 
-	if err := s.Repo.Update(job); err != nil {
+	if err := s.Repo.Save(job); err != nil {
 		return nil, err
 	}
 	if err := s.Publisher.Publish(job.Aggregate.Events); err != nil {
