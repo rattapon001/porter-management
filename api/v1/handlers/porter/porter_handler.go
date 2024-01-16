@@ -19,14 +19,14 @@ func NewPorterHandler(porterService app.PorterService) *PorterHandler {
 	}
 }
 
-func (h *PorterHandler) CreatedNewPorter(c *gin.Context) {
+func (h *PorterHandler) NewPorter(c *gin.Context) {
 	var porter domain.Porter
 	if err := c.ShouldBindJSON(&porter); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	mockNotiToken := uuid.New().String()
-	newPorter, err := h.PorterService.CreatedNewPorter(porter.Name, mockNotiToken)
+	newPorter, err := h.PorterService.CreateNewPorter(porter.Name, mockNotiToken)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

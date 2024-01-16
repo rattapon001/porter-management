@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestCompletedJob(t *testing.T) {
+func TestCompleteJobUseCase(t *testing.T) {
 	assert := assert.New(t)
 
 	mockRepo := new(MockRepository)
@@ -33,7 +33,7 @@ func TestCompletedJob(t *testing.T) {
 		Publisher: mockPublisher,
 	}
 
-	startedJob, err := jobService.CompletedJob("1")
+	startedJob, err := jobService.CompleteJob("1")
 	log.Println("TestCompletedJob startedJob", startedJob)
 	log.Println("TestCompletedJob err", err)
 	assert.NoError(err, "should not return an error")

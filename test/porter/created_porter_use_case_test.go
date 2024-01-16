@@ -48,7 +48,7 @@ func (m *MockEventHandler) Publish(event []pkg.Event) error {
 	return args.Error(0)
 }
 
-func TestCreatedPorterUseCase(t *testing.T) {
+func TestCreatePorterUseCase(t *testing.T) {
 	assert := assert.New(t)
 	mockRepo := new(MockRepository)
 	mockRepo.On("Save", mock.AnythingOfType("*domain.Porter")).Return(nil)
@@ -63,7 +63,7 @@ func TestCreatedPorterUseCase(t *testing.T) {
 
 	token := "token"
 
-	porter, err := porterService.CreatedNewPorter("porter1", token)
+	porter, err := porterService.CreateNewPorter("porter1", token)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.PorterStatusUnavailable, porter.Status, "created porter status should be available")
 }

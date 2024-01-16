@@ -7,8 +7,8 @@ import (
 )
 
 type PorterService interface {
-	CreatedNewPorter(name string, token string) (*domain.Porter, error)
-	PorterAllowcated(payload domain.Job) (*domain.Porter, error)
+	CreateNewPorter(name string, token string) (*domain.Porter, error)
+	PorterAllowcate(payload domain.Job) (*domain.Porter, error)
 	PorterWorking(code domain.PorterCode) (*domain.Porter, error)
 	PorterAvailable(code domain.PorterCode) (*domain.Porter, error)
 	PorterUnavailable(code domain.PorterCode) (*domain.Porter, error)

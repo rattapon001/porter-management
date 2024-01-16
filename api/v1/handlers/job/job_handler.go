@@ -18,7 +18,7 @@ func NewJobHandler(jobService app.JobService) *JobHandler {
 	}
 }
 
-func (h *JobHandler) CreatedNewJob(c *gin.Context) {
+func (h *JobHandler) CreateNewJob(c *gin.Context) {
 	var job domain.Job
 	if err := c.ShouldBindJSON(&job); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -33,7 +33,7 @@ func (h *JobHandler) CreatedNewJob(c *gin.Context) {
 		HN:   job.Patient.HN,
 	}
 
-	newJob, err := h.JobService.CreatedNewJob(location, patient)
+	newJob, err := h.JobService.CreateNewJob(location, patient)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -41,7 +41,7 @@ func (h *JobHandler) CreatedNewJob(c *gin.Context) {
 	c.JSON(http.StatusOK, newJob)
 }
 
-func (h *JobHandler) AcceptedJob(c *gin.Context) {
+func (h *JobHandler) AcceptJob(c *gin.Context) {
 	var porter domain.Porter
 	if err := c.ShouldBindJSON(&porter); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -50,7 +50,7 @@ func (h *JobHandler) AcceptedJob(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
 
-	job, err := h.JobService.AcceptedJob(jobId, porter)
+	job, err := h.JobService.AcceptJob(jobId, porter)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -58,11 +58,11 @@ func (h *JobHandler) AcceptedJob(c *gin.Context) {
 	c.JSON(http.StatusOK, job)
 }
 
-func (h *JobHandler) StartedJob(c *gin.Context) {
+func (h *JobHandler) StartJob(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
 
-	job, err := h.JobService.StartedJob(jobId)
+	job, err := h.JobService.StartJob(jobId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -70,10 +70,10 @@ func (h *JobHandler) StartedJob(c *gin.Context) {
 	c.JSON(http.StatusOK, job)
 }
 
-func (h *JobHandler) CompletedJob(c *gin.Context) {
+func (h *JobHandler) CompleteJob(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
-	job, err := h.JobService.CompletedJob(jobId)
+	job, err := h.JobService.CompleteJob(jobId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

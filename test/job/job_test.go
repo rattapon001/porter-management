@@ -26,7 +26,7 @@ var porter = domain.Porter{
 }
 
 var jobCreatedEvent = pkg.Event{
-	EventName: domain.JobEventCreated,
+	EventName: domain.JobCreatedEvent,
 	Payload: map[string]interface{}{
 		"job_id":   uuid.New().String(),
 		"version":  1,
@@ -37,7 +37,7 @@ var jobCreatedEvent = pkg.Event{
 }
 
 var jobAcceptedEvent = pkg.Event{
-	EventName: domain.JobEventCreated,
+	EventName: domain.JobCreatedEvent,
 	Payload: map[string]interface{}{
 		"job_id":   uuid.New().String(),
 		"version":  2,
@@ -49,7 +49,7 @@ var jobAcceptedEvent = pkg.Event{
 }
 
 var jobStartedEvent = pkg.Event{
-	EventName: domain.JobEventCreated,
+	EventName: domain.JobCreatedEvent,
 	Payload: map[string]interface{}{
 		"job_id":   uuid.New().String(),
 		"version":  3,
@@ -73,7 +73,7 @@ func TestCreateNewJob(t *testing.T) {
 		HN:   "HN123",
 	}
 
-	createdJob, err := domain.CreatedNewJob(location, patient)
+	createdJob, err := domain.NewJob(location, patient)
 	assert.Nil(err, "error should be nil")
 	assert.Equal(domain.JobStatusPending, createdJob.Status, "created job status should be pending")
 	assert.Equal(1, len(createdJob.Aggregate.Events), "created job should have 1 event")

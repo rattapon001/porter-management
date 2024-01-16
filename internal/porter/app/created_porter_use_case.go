@@ -5,12 +5,12 @@ import (
 	"github.com/rattapon001/porter-management/internal/porter/domain"
 )
 
-func (s *PorterServiceImpl) CreatedNewPorter(name string, token string) (*domain.Porter, error) {
+func (s *PorterServiceImpl) CreateNewPorter(name string, token string) (*domain.Porter, error) {
 	portCode, err := uuid.NewUUID()
 	if err != nil {
 		return nil, err
 	}
-	porter, err := domain.CreatedNewPorter(name, portCode.String(), token)
+	porter, err := domain.NewPorter(name, portCode.String(), token)
 	if err != nil {
 		return nil, err
 	}

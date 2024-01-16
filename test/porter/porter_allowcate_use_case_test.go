@@ -19,11 +19,11 @@ func (m *MockNotification) Notify(token string, payload pkg.NotificationPayload)
 	return args.Error(0)
 }
 
-func TestPorterAllowcated(t *testing.T) {
+func TestPorterAllowcate(t *testing.T) {
 	assert := assert.New(t)
 	mockRepo := new(MockRepository)
 
-	porter, _ := domain.CreatedNewPorter("porter1", "code-001", "token")
+	porter, _ := domain.NewPorter("porter1", "code-001", "token")
 	mockRepo.On("FindAvailablePorter").Return(porter)
 	mockNoti := new(MockNotification)
 	mockNoti.On("Notify", mock.AnythingOfType("string"), mock.AnythingOfType("pkg.NotificationPayload")).Return(nil)
@@ -43,7 +43,7 @@ func TestPorterAllowcated(t *testing.T) {
 		Location: location,
 		Patient:  patient,
 	}
-	porter, err := porterService.PorterAllowcated(job)
+	porter, err := porterService.PorterAllowcate(job)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(porter.Name, "porter1", "should return porter1")
 }

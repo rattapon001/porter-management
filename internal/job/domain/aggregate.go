@@ -3,10 +3,10 @@ package domain
 import "github.com/rattapon001/porter-management/pkg"
 
 const (
-	JobEventCreated   pkg.EventName = "job_created"
-	JobEventAccepted  pkg.EventName = "job_accepted"
-	JobEventWorking   pkg.EventName = "job_working"
-	JobEventCompleted pkg.EventName = "job_completed"
+	JobCreatedEvent   pkg.EventName = "job_created"
+	JobAcceptedEvent  pkg.EventName = "job_accepted"
+	JobWorkingEvent   pkg.EventName = "job_working"
+	JobCompletedEvent pkg.EventName = "job_completed"
 )
 
 type Aggregate struct {

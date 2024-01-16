@@ -13,7 +13,7 @@ type PorterAllowcateCommand struct {
 func (p *PorterAllowcateCommand) Execute(event interface{}) {
 	if eventData, ok := event.(pkg.Event); ok {
 		if eventPayload, ok := eventData.Payload.(domain.Job); ok {
-			p.PorterService.PorterAllowcated(eventPayload)
+			p.PorterService.PorterAllowcate(eventPayload)
 		}
 	}
 }

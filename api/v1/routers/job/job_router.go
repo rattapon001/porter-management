@@ -11,10 +11,10 @@ func InitJobRouter(router *gin.Engine, JobService app.JobService) {
 
 	jobRouter := router.Group("/jobs")
 	{
-		jobRouter.POST("/", JobHandler.CreatedNewJob)
-		jobRouter.POST("/:id/accepted", JobHandler.AcceptedJob)
-		jobRouter.POST("/:id/started", JobHandler.StartedJob)
-		jobRouter.POST("/:id/completed", JobHandler.CompletedJob)
+		jobRouter.POST("/", JobHandler.CreateNewJob)
+		jobRouter.POST("/:id/accept", JobHandler.AcceptJob)
+		jobRouter.POST("/:id/start", JobHandler.StartJob)
+		jobRouter.POST("/:id/complete", JobHandler.CompleteJob)
 		jobRouter.GET("/:id", JobHandler.FindJobById)
 	}
 }

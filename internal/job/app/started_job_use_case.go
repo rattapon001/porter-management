@@ -2,12 +2,12 @@ package app
 
 import "github.com/rattapon001/porter-management/internal/job/domain"
 
-func (s *JobServiceImpl) StartedJob(id domain.JobId) (*domain.Job, error) {
+func (s *JobServiceImpl) StartJob(id domain.JobId) (*domain.Job, error) {
 	job, err := s.Repo.FindById(domain.JobId(id))
 	if err != nil {
 		return nil, err
 	}
-	job.StartedJob()
+	job.Start()
 	if err := s.Repo.Update(job); err != nil {
 		return nil, err
 	}

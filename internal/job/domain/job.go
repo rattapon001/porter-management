@@ -44,7 +44,7 @@ type Job struct {
 	Aggregate Aggregate `bson:"aggregate"`
 }
 
-func CreatedNewJob(location Location, patient Patient) (*Job, error) {
+func NewJob(location Location, patient Patient) (*Job, error) {
 
 	ID, err := uuid.NewUUID()
 	if err != nil {
@@ -70,10 +70,10 @@ func (j *Job) JobCreatedEvent() {
 		"location": j.Location,
 		"patient":  j.Patient,
 	}
-	j.Aggregate.AppendEvent(JobEventCreated, payload)
+	j.Aggregate.AppendEvent(JobCreatedEvent, payload)
 }
 
-func (j *Job) AcceptedJob(porter Porter) {
+func (j *Job) Accept(porter Porter) {
 	if j.Status != JobStatusPending {
 		return
 	}
@@ -83,7 +83,7 @@ func (j *Job) AcceptedJob(porter Porter) {
 	j.JobAcceptedEvent()
 }
 
-func (j *Job) StartedJob() {
+func (j *Job) Start() {
 	if j.Status != JobStatusAccepted {
 		return
 	}
@@ -92,7 +92,7 @@ func (j *Job) StartedJob() {
 	j.JobStartedEvent()
 }
 
-func (j *Job) CompletedJob() {
+func (j *Job) Complete() {
 	if j.Status != JobStatusWorking {
 		return
 	}
@@ -111,7 +111,7 @@ func (j *Job) JobAcceptedEvent() {
 		"patient":  j.Patient,
 		"porter":   j.Porter,
 	}
-	j.Aggregate.AppendEvent(JobEventAccepted, payload)
+	j.Aggregate.AppendEvent(JobAcceptedEvent, payload)
 }
 
 func (j *Job) JobStartedEvent() {
@@ -125,7 +125,7 @@ func (j *Job) JobStartedEvent() {
 		"porter":   j.Porter,
 		"check_in": j.CheckIn,
 	}
-	j.Aggregate.AppendEvent(JobEventWorking, payload)
+	j.Aggregate.AppendEvent(JobWorkingEvent, payload)
 }
 
 func (j *Job) JobCompletedEvent() {
@@ -139,5 +139,5 @@ func (j *Job) JobCompletedEvent() {
 		"check_in":  j.CheckIn,
 		"check_out": j.CheckOut,
 	}
-	j.Aggregate.AppendEvent(JobEventCompleted, payload)
+	j.Aggregate.AppendEvent(JobCompletedEvent, payload)
 }

@@ -11,7 +11,7 @@ import (
 
 func TestPorterUnavalable(t *testing.T) {
 	assert := assert.New(t)
-	porter, err := domain.CreatedNewPorter("porter1", "code-001", "token")
+	porter, err := domain.NewPorter("porter1", "code-001", "token")
 	assert.NoError(err, "should not return an error")
 
 	mockRepo := new(MockRepository)

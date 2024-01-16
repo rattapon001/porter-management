@@ -31,7 +31,7 @@ func TestStartedJob(t *testing.T) {
 		Publisher: mockPublisher,
 	}
 
-	startedJob, err := jobService.StartedJob("1")
+	startedJob, err := jobService.StartJob("1")
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.JobStatusWorking, startedJob.Status, "started job status should be started")
 	assert.Equal(3, len(startedJob.Aggregate.Events), "started job should have 3 events")
