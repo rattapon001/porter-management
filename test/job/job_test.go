@@ -30,7 +30,7 @@ var jobCreatedEvent = pkg.Event{
 	Payload: map[string]interface{}{
 		"job_id":   uuid.New().String(),
 		"version":  1,
-		"status":   domain.JobStatusPending,
+		"status":   domain.JobPendingStatus,
 		"location": location,
 		"patient":  patient,
 	},
@@ -41,7 +41,7 @@ var jobAcceptedEvent = pkg.Event{
 	Payload: map[string]interface{}{
 		"job_id":   uuid.New().String(),
 		"version":  2,
-		"status":   domain.JobStatusAccepted,
+		"status":   domain.JobAcceptedStatus,
 		"location": location,
 		"patient":  patient,
 		"porter":   porter,
@@ -53,7 +53,7 @@ var jobStartedEvent = pkg.Event{
 	Payload: map[string]interface{}{
 		"job_id":   uuid.New().String(),
 		"version":  3,
-		"status":   domain.JobStatusWorking,
+		"status":   domain.JobWorkingStatus,
 		"location": location,
 		"patient":  patient,
 		"porter":   porter,
@@ -75,6 +75,6 @@ func TestCreateNewJob(t *testing.T) {
 
 	createdJob, err := domain.NewJob(location, patient)
 	assert.Nil(err, "error should be nil")
-	assert.Equal(domain.JobStatusPending, createdJob.Status, "created job status should be pending")
+	assert.Equal(domain.JobPendingStatus, createdJob.Status, "created job status should be pending")
 	assert.Equal(1, len(createdJob.Aggregate.Events), "created job should have 1 event")
 }

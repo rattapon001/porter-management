@@ -10,10 +10,10 @@ type JobId string
 type JobStatus string
 
 const (
-	JobStatusPending   JobStatus = "pending"
-	JobStatusAccepted  JobStatus = "accepted"
-	JobStatusWorking   JobStatus = "working"
-	JobStatusCompleted JobStatus = "completed"
+	JobPendingStatus   JobStatus = "pending"
+	JobAcceptedStatus  JobStatus = "accepted"
+	JobWorkingStatus   JobStatus = "working"
+	JobCompletedStatus JobStatus = "completed"
 )
 
 type Location struct {
@@ -53,7 +53,7 @@ func NewJob(location Location, patient Patient) (*Job, error) {
 	job := &Job{
 		ID:       JobId(ID.String()),
 		Version:  1,
-		Status:   JobStatusPending,
+		Status:   JobPendingStatus,
 		Location: location,
 		Patient:  patient,
 	}
@@ -74,30 +74,30 @@ func (j *Job) JobCreatedEvent() {
 }
 
 func (j *Job) Accept(porter Porter) {
-	if j.Status != JobStatusPending {
+	if j.Status != JobPendingStatus {
 		return
 	}
-	j.Status = JobStatusAccepted
+	j.Status = JobAcceptedStatus
 	j.Accepted = true
 	j.Porter = porter
 	j.JobAcceptedEvent()
 }
 
 func (j *Job) Start() {
-	if j.Status != JobStatusAccepted {
+	if j.Status != JobAcceptedStatus {
 		return
 	}
 	j.CheckIn = time.Now()
-	j.Status = JobStatusWorking
+	j.Status = JobWorkingStatus
 	j.JobStartedEvent()
 }
 
 func (j *Job) Complete() {
-	if j.Status != JobStatusWorking {
+	if j.Status != JobWorkingStatus {
 		return
 	}
 	j.CheckOut = time.Now()
-	j.Status = JobStatusCompleted
+	j.Status = JobCompletedStatus
 	j.JobCompletedEvent()
 }
 

@@ -16,7 +16,7 @@ func TestCompleteJobUseCase(t *testing.T) {
 
 	mockRepo := new(MockRepository)
 	mockRepo.On("FindById", mock.AnythingOfType("domain.JobId")).Return(&domain.Job{
-		Status: domain.JobStatusWorking,
+		Status: domain.JobWorkingStatus,
 		Aggregate: domain.Aggregate{
 			Events: []pkg.Event{
 				jobCreatedEvent, jobAcceptedEvent, jobStartedEvent,
@@ -37,7 +37,7 @@ func TestCompleteJobUseCase(t *testing.T) {
 	log.Println("TestCompletedJob startedJob", startedJob)
 	log.Println("TestCompletedJob err", err)
 	assert.NoError(err, "should not return an error")
-	assert.Equal(domain.JobStatusCompleted, startedJob.Status, "completed job status should be completed")
+	assert.Equal(domain.JobCompletedStatus, startedJob.Status, "completed job status should be completed")
 	assert.Equal(4, len(startedJob.Aggregate.Events), "completed job should have 4 events")
 
 }

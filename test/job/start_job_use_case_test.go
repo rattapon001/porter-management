@@ -15,7 +15,7 @@ func TestStartedJob(t *testing.T) {
 
 	mockRepo := new(MockRepository)
 	mockRepo.On("FindById", mock.AnythingOfType("domain.JobId")).Return(&domain.Job{
-		Status: domain.JobStatusAccepted,
+		Status: domain.JobAcceptedStatus,
 		Aggregate: domain.Aggregate{
 			Events: []pkg.Event{
 				jobCreatedEvent, jobAcceptedEvent,
@@ -33,7 +33,7 @@ func TestStartedJob(t *testing.T) {
 
 	startedJob, err := JobUseCase.StartJob("1")
 	assert.NoError(err, "should not return an error")
-	assert.Equal(domain.JobStatusWorking, startedJob.Status, "started job status should be started")
+	assert.Equal(domain.JobWorkingStatus, startedJob.Status, "started job status should be started")
 	assert.Equal(3, len(startedJob.Aggregate.Events), "started job should have 3 events")
 
 }

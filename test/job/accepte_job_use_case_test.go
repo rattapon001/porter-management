@@ -16,7 +16,7 @@ func TestAcceptJobUseCase(t *testing.T) {
 	mockRepo := new(MockRepository)
 	mockRepo.On("Update", mock.AnythingOfType("*domain.Job")).Return(nil)
 	mockRepo.On("FindById", mock.AnythingOfType("domain.JobId")).Return(&domain.Job{
-		Status: domain.JobStatusPending,
+		Status: domain.JobPendingStatus,
 		Aggregate: domain.Aggregate{
 			Events: []pkg.Event{
 				jobCreatedEvent,
@@ -31,6 +31,6 @@ func TestAcceptJobUseCase(t *testing.T) {
 	}
 	acceptedJob, err := JobUseCase.AcceptJob("1", porter)
 	assert.NoError(err, "should not return an error")
-	assert.Equal(domain.JobStatusAccepted, acceptedJob.Status, "accepted job status should be accepted")
+	assert.Equal(domain.JobAcceptedStatus, acceptedJob.Status, "accepted job status should be accepted")
 	assert.Equal(2, len(acceptedJob.Aggregate.Events), "accepted job should have 2 events")
 }
