@@ -22,7 +22,7 @@ func TestStartedJob(t *testing.T) {
 			},
 		},
 	}, nil)
-	mockRepo.On("Update", mock.AnythingOfType("*domain.Job")).Return(nil)
+	mockRepo.On("Save", mock.AnythingOfType("*domain.Job")).Return(nil)
 
 	mockPublisher := new(MockEventHandler)
 	mockPublisher.On("Publish", mock.AnythingOfType("[]pkg.Event")).Return(nil)

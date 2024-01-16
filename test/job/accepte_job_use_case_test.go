@@ -14,7 +14,7 @@ func TestAcceptJobUseCase(t *testing.T) {
 	assert := assert.New(t)
 
 	mockRepo := new(MockRepository)
-	mockRepo.On("Update", mock.AnythingOfType("*domain.Job")).Return(nil)
+	mockRepo.On("Save", mock.AnythingOfType("*domain.Job")).Return(nil)
 	mockRepo.On("FindById", mock.AnythingOfType("domain.JobId")).Return(&domain.Job{
 		Status: domain.JobPendingStatus,
 		Aggregate: domain.Aggregate{
