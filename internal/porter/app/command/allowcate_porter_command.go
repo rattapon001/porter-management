@@ -7,13 +7,13 @@ import (
 )
 
 type PorterAllowcateCommand struct {
-	PorterService app.PorterService
+	PorterUseCase app.PorterUseCase
 }
 
 func (p *PorterAllowcateCommand) Execute(event interface{}) {
 	if eventData, ok := event.(pkg.Event); ok {
 		if eventPayload, ok := eventData.Payload.(domain.Job); ok {
-			p.PorterService.PorterAllowcate(eventPayload)
+			p.PorterUseCase.PorterAllowcate(eventPayload)
 		}
 	}
 }

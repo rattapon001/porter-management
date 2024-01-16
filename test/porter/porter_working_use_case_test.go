@@ -21,11 +21,11 @@ func TestPorterWorking(t *testing.T) {
 	mockPublisher := new(MockEventHandler)
 	mockPublisher.On("Publish", mock.AnythingOfType("[]event.Event")).Return(nil)
 
-	porterService := app.PorterServiceImpl{
+	PorterUseCase := app.PorterUseCaseImpl{
 		Repo:      mockRepo,
 		Publisher: mockPublisher,
 	}
-	porter, err = porterService.PorterWorking(porter.Code)
+	porter, err = PorterUseCase.PorterWorking(porter.Code)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(porter.Name, "porter1", "should return porter1")
 	assert.Equal(porter.Status, domain.PorterStatusWorking, "should return working")

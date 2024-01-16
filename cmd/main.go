@@ -28,7 +28,7 @@ func main() {
 	// Init Porter Router
 	porterRepository := porter_memory.NewPorterMemoryRepository()
 	PorterPublisher := porter_memory.NewMockImplimentEventHandler()
-	porterService := porter_app.NewPorterService(porterRepository, PorterPublisher)
-	porter_router.InitPorterRouter(router, porterService)
+	PorterUseCase := porter_app.NewPorterUseCase(porterRepository, PorterPublisher)
+	porter_router.InitPorterRouter(router, PorterUseCase)
 	router.Run(port)
 }

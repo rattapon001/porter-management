@@ -6,7 +6,7 @@ import (
 	"github.com/rattapon001/porter-management/internal/porter/domain"
 )
 
-type PorterService interface {
+type PorterUseCase interface {
 	CreateNewPorter(name string, token string) (*domain.Porter, error)
 	PorterAllowcate(payload domain.Job) (*domain.Porter, error)
 	PorterWorking(code domain.PorterCode) (*domain.Porter, error)
@@ -14,14 +14,14 @@ type PorterService interface {
 	PorterUnavailable(code domain.PorterCode) (*domain.Porter, error)
 }
 
-type PorterServiceImpl struct {
+type PorterUseCaseImpl struct {
 	Repo      domain.PorterRepository
 	Publisher event.EventHandler
 	Noti      app.NotificationService
 }
 
-func NewPorterService(repo domain.PorterRepository, publisher event.EventHandler) PorterService {
-	return &PorterServiceImpl{
+func NewPorterUseCase(repo domain.PorterRepository, publisher event.EventHandler) PorterUseCase {
+	return &PorterUseCaseImpl{
 		Repo:      repo,
 		Publisher: publisher,
 	}

@@ -5,7 +5,7 @@ import (
 	"github.com/rattapon001/porter-management/pkg"
 )
 
-func (s *PorterServiceImpl) PorterAllowcate(payload domain.Job) (*domain.Porter, error) {
+func (s *PorterUseCaseImpl) PorterAllowcate(payload domain.Job) (*domain.Porter, error) {
 	availablePorter := s.Repo.FindAvailablePorter()
 	if availablePorter == nil {
 		return nil, nil

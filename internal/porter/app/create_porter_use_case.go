@@ -5,7 +5,7 @@ import (
 	"github.com/rattapon001/porter-management/internal/porter/domain"
 )
 
-func (s *PorterServiceImpl) CreateNewPorter(name string, token string) (*domain.Porter, error) {
+func (s *PorterUseCaseImpl) CreateNewPorter(name string, token string) (*domain.Porter, error) {
 	portCode, err := uuid.NewUUID()
 	if err != nil {
 		return nil, err

@@ -5,7 +5,7 @@ import (
 	error_handler "github.com/rattapon001/porter-management/internal/porter/domain/errors"
 )
 
-func (s *PorterServiceImpl) PorterWorking(code domain.PorterCode) (*domain.Porter, error) {
+func (s *PorterUseCaseImpl) PorterWorking(code domain.PorterCode) (*domain.Porter, error) {
 	porter := s.Repo.FindByCode(code)
 	if porter == nil {
 		return nil, error_handler.ErrPorterNotFound

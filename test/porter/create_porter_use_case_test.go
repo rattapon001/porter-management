@@ -56,14 +56,14 @@ func TestCreatePorterUseCase(t *testing.T) {
 	mockPublisher := new(MockEventHandler)
 	mockPublisher.On("Publish", mock.AnythingOfType("[]event.Event")).Return(nil)
 
-	porterService := app.PorterServiceImpl{
+	PorterUseCase := app.PorterUseCaseImpl{
 		Repo:      mockRepo,
 		Publisher: mockPublisher,
 	}
 
 	token := "token"
 
-	porter, err := porterService.CreateNewPorter("porter1", token)
+	porter, err := PorterUseCase.CreateNewPorter("porter1", token)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.PorterStatusUnavailable, porter.Status, "created porter status should be available")
 }

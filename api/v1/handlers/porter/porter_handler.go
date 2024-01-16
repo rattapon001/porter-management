@@ -10,12 +10,12 @@ import (
 )
 
 type PorterHandler struct {
-	PorterService app.PorterService
+	PorterUseCase app.PorterUseCase
 }
 
-func NewPorterHandler(porterService app.PorterService) *PorterHandler {
+func NewPorterHandler(PorterUseCase app.PorterUseCase) *PorterHandler {
 	return &PorterHandler{
-		PorterService: porterService,
+		PorterUseCase: PorterUseCase,
 	}
 }
 
@@ -26,7 +26,7 @@ func (h *PorterHandler) NewPorter(c *gin.Context) {
 		return
 	}
 	mockNotiToken := uuid.New().String()
-	newPorter, err := h.PorterService.CreateNewPorter(porter.Name, mockNotiToken)
+	newPorter, err := h.PorterUseCase.CreateNewPorter(porter.Name, mockNotiToken)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -36,7 +36,7 @@ func (h *PorterHandler) NewPorter(c *gin.Context) {
 
 func (h *PorterHandler) PorterAvailable(c *gin.Context) {
 	code := domain.PorterCode(c.Param("code"))
-	porter, err := h.PorterService.PorterAvailable(code)
+	porter, err := h.PorterUseCase.PorterAvailable(code)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -46,7 +46,7 @@ func (h *PorterHandler) PorterAvailable(c *gin.Context) {
 
 func (h *PorterHandler) PorterUnavailable(c *gin.Context) {
 	code := domain.PorterCode(c.Param("code"))
-	porter, err := h.PorterService.PorterUnavailable(code)
+	porter, err := h.PorterUseCase.PorterUnavailable(code)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

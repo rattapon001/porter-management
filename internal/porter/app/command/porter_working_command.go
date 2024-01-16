@@ -7,13 +7,13 @@ import (
 )
 
 type PorterWorkingCommand struct {
-	PorterService app.PorterService
+	PorterUseCase app.PorterUseCase
 }
 
 func (p *PorterWorkingCommand) Execute(event interface{}) {
 	if eventData, ok := event.(pkg.Event); ok {
 		if eventPayload, ok := eventData.Payload.(domain.Job); ok {
-			p.PorterService.PorterWorking(domain.PorterCode(eventPayload.Porter.Code))
+			p.PorterUseCase.PorterWorking(domain.PorterCode(eventPayload.Porter.Code))
 		}
 	}
 }

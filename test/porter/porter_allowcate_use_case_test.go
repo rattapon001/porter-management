@@ -27,7 +27,7 @@ func TestPorterAllowcate(t *testing.T) {
 	mockRepo.On("FindAvailablePorter").Return(porter)
 	mockNoti := new(MockNotification)
 	mockNoti.On("Notify", mock.AnythingOfType("string"), mock.AnythingOfType("pkg.NotificationPayload")).Return(nil)
-	porterService := app.PorterServiceImpl{
+	PorterUseCase := app.PorterUseCaseImpl{
 		Repo: mockRepo,
 		Noti: mockNoti,
 	}
@@ -43,7 +43,7 @@ func TestPorterAllowcate(t *testing.T) {
 		Location: location,
 		Patient:  patient,
 	}
-	porter, err := porterService.PorterAllowcate(job)
+	porter, err := PorterUseCase.PorterAllowcate(job)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(porter.Name, "porter1", "should return porter1")
 }
