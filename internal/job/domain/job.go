@@ -87,7 +87,7 @@ func (j *Job) StartedJob() {
 	if j.Status != JobStatusAccepted {
 		return
 	}
-	j.CheckInJob()
+	j.CheckIn = time.Now()
 	j.Status = JobStatusWorking
 	j.JobStartedEvent()
 }
@@ -96,17 +96,9 @@ func (j *Job) CompletedJob() {
 	if j.Status != JobStatusWorking {
 		return
 	}
-	j.CheckOutJob()
+	j.CheckOut = time.Now()
 	j.Status = JobStatusCompleted
 	j.JobCompletedEvent()
-}
-
-func (j *Job) CheckInJob() {
-	j.CheckIn = time.Now()
-}
-
-func (j *Job) CheckOutJob() {
-	j.CheckOut = time.Now()
 }
 
 func (j *Job) JobAcceptedEvent() {
