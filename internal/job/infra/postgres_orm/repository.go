@@ -16,7 +16,13 @@ func NewPostgresOrmRepository(db *gorm.DB) *PostgresOrmRepository {
 }
 
 func (r *PostgresOrmRepository) Save(job *domain.Job) error {
-	return r.db.Save(job).Error
+	var jobDB domain.Job
+	currentVersion := job.Version
+	if err := r.db.First(&jobDB, job.ID).Error; err != nil {
+		return r.db.Save(job).Error
+	}
+	job.Version++
+	return r.db.Model(&jobDB).Updates(job).Where("version = ?", currentVersion).Error
 }
 
 func (r *PostgresOrmRepository) FindById(id domain.JobId) (*domain.Job, error) {
