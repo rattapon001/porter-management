@@ -14,7 +14,7 @@ func GetPostgresOrmConfig() *PostgresOrmConfig {
 		Host:     "localhost",
 		Port:     5432,
 		User:     "postgres",
-		Password: "postgres",
+		Password: "123456",
 		Database: "porter_management_db",
 		SSLMode:  "disable",
 	}

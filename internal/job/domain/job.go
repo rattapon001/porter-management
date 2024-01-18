@@ -21,8 +21,8 @@ const (
 )
 
 type Location struct {
-	From string
-	To   string
+	From string `bson:"from" json:"from"`
+	To   string `bson:"to" json:"to"`
 }
 
 func (l Location) Value() (driver.Value, error) {
@@ -39,8 +39,8 @@ func (l *Location) Scan(value interface{}) error {
 }
 
 type Patient struct {
-	Name string
-	HN   string
+	Name string `bson:"name" json:"name"`
+	HN   string `bson:"hn" json:"hn"`
 }
 
 func (p Patient) Value() (driver.Value, error) {
@@ -56,8 +56,8 @@ func (p *Patient) Scan(value interface{}) error {
 }
 
 type Porter struct {
-	Code string
-	Name string
+	Code string `bson:"code" json:"code"`
+	Name string `bson:"name" json:"name"`
 }
 
 func (p Porter) Value() (driver.Value, error) {
@@ -73,16 +73,16 @@ func (p *Porter) Scan(value interface{}) error {
 }
 
 type Job struct {
-	ID        JobId `gorm:"primaryKey"`
-	Version   int
-	Status    JobStatus
-	Accepted  bool
-	Location  Location `gorm:"type:jsonb"`
-	Patient   Patient  `gorm:"type:jsonb"`
-	Porter    Porter   `gorm:"type:jsonb"`
-	CheckIn   time.Time
-	CheckOut  time.Time
-	Aggregate Aggregate `gorm:"type:jsonb"`
+	ID        JobId     `bson:"id" gorm:"primaryKey"`
+	Version   int       `bson:"version"`
+	Status    JobStatus `bson:"status"`
+	Accepted  bool      `bson:"accepted"`
+	Location  Location  `bson:"location" gorm:"type:jsonb"`
+	Patient   Patient   `bson:"patient" gorm:"type:jsonb"`
+	Porter    Porter    `bson:"porter" gorm:"type:jsonb"`
+	CheckIn   time.Time `bson:"checkIn"`
+	CheckOut  time.Time `bson:"checkOut"`
+	Aggregate Aggregate `bson:"aggregate" gorm:"type:jsonb"`
 }
 
 func NewJob(location Location, patient Patient) (*Job, error) {
