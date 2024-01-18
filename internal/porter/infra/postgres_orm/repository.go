@@ -15,6 +15,10 @@ func NewPostgresOrmRepository(db *gorm.DB) *PostgresOrmRepository {
 	}
 }
 
+// Save saves the given Porter entity to the Postgres database.
+// If the Porter already exists in the database, it updates the existing record.
+// If the Porter doesn't exist, it inserts a new record.
+// Returns an error if any error occurs during the save operation.
 func (r *PostgresOrmRepository) Save(p *domain.Porter) error {
 	var existingPorter domain.Porter
 	err := r.db.Where("id = ?", p.ID).First(&existingPorter).Error

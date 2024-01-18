@@ -23,29 +23,29 @@ func (r *PorterMemoryRepository) Save(porter *domain.Porter) error {
 	return nil
 }
 
-func (r *PorterMemoryRepository) FindAvailablePorter() *domain.Porter {
+func (r *PorterMemoryRepository) FindAvailablePorter() (*domain.Porter, error) {
 	for _, p := range r.porters {
 		if p.Status == domain.PorterStatusAvailable {
-			return p
+			return p, nil
 		}
 	}
-	return nil
+	return nil, nil
 }
 
-func (r *PorterMemoryRepository) FindByID(id domain.PorterId) *domain.Porter {
+func (r *PorterMemoryRepository) FindByID(id domain.PorterId) (*domain.Porter, error) {
 	for _, p := range r.porters {
 		if p.ID == id {
-			return p
+			return p, nil
 		}
 	}
-	return nil
+	return nil, nil
 }
 
-func (r *PorterMemoryRepository) FindByCode(code domain.PorterCode) *domain.Porter {
+func (r *PorterMemoryRepository) FindByCode(code domain.PorterCode) (*domain.Porter, error) {
 	for _, p := range r.porters {
 		if p.Code == code {
-			return p
+			return p, nil
 		}
 	}
-	return nil
+	return nil, nil
 }
