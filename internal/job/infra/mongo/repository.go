@@ -13,6 +13,14 @@ type MongoDbRepository struct {
 	Coll *mongo.Collection
 }
 
+// NewMongoDbRepository creates a new instance of the MongoDbRepository.
+// It takes a *mongo.Collection as a parameter and returns a pointer to the MongoDbRepository.
+func NewMongoDbRepository(coll *mongo.Collection) *MongoDbRepository {
+	return &MongoDbRepository{
+		Coll: coll,
+	}
+}
+
 // Save saves the given job to the MongoDB repository.
 // If the job already exists, it checks the version for optimistic locking.
 // If the version is outdated, it returns ErrVersionMismatch.
