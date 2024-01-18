@@ -2,14 +2,14 @@ package app
 
 import (
 	"github.com/rattapon001/porter-management/internal/porter/domain"
-	error_handler "github.com/rattapon001/porter-management/internal/porter/domain/errors"
 )
 
 func (s *PorterUseCaseImpl) PorterUnavailable(code domain.PorterCode) (*domain.Porter, error) {
-	porter := s.Repo.FindByCode(code)
-	if porter == nil {
-		return nil, error_handler.ErrPorterNotFound
+	porter, err := s.Repo.FindByCode(code)
+	if err != nil {
+		return nil, err
 	}
+
 	porter.Unavailable()
 	if err := s.Repo.Save(porter); err != nil {
 		return nil, err

@@ -6,9 +6,9 @@ import (
 )
 
 func (s *PorterUseCaseImpl) PorterAllowcate(payload domain.Job) (*domain.Porter, error) {
-	availablePorter := s.Repo.FindAvailablePorter()
-	if availablePorter == nil {
-		return nil, nil
+	availablePorter, err := s.Repo.FindAvailablePorter()
+	if err != nil {
+		return nil, err
 	}
 	NotiPayload := pkg.NotificationPayload{
 		JobId:   string(payload.ID),

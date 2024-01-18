@@ -19,19 +19,19 @@ func (m *MockRepository) Save(job *domain.Porter) error {
 	return args.Error(0)
 }
 
-func (m *MockRepository) FindAvailablePorter() *domain.Porter {
+func (m *MockRepository) FindAvailablePorter() (*domain.Porter, error) {
 	args := m.Called()
-	return args.Get(0).(*domain.Porter)
+	return args.Get(0).(*domain.Porter), nil
 }
 
-func (m *MockRepository) FindByID(id domain.PorterId) *domain.Porter {
+func (m *MockRepository) FindByID(id domain.PorterId) (*domain.Porter, error) {
 	args := m.Called(id)
-	return args.Get(0).(*domain.Porter)
+	return args.Get(0).(*domain.Porter), nil
 }
 
-func (m *MockRepository) FindByCode(code domain.PorterCode) *domain.Porter {
+func (m *MockRepository) FindByCode(code domain.PorterCode) (*domain.Porter, error) {
 	args := m.Called(code)
-	return args.Get(0).(*domain.Porter)
+	return args.Get(0).(*domain.Porter), nil
 }
 
 type MockEventHandler struct {
