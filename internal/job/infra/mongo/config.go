@@ -5,6 +5,7 @@ type MongoConfig struct {
 	Port     string
 	User     string
 	Password string
+	Database string
 }
 
 func GetMongoConfig() *MongoConfig {
@@ -13,5 +14,6 @@ func GetMongoConfig() *MongoConfig {
 		Port:     "27017",
 		User:     "root",
 		Password: "123456",
+		Database: "porter_management_db",
 	}
 }

@@ -30,7 +30,7 @@ func NewMongoDbRepository(coll *mongo.Collection) *MongoDbRepository {
 func (r *MongoDbRepository) Save(job *domain.Job) error {
 	currentVersion := job.Version
 	var existingJob domain.Job
-	err := r.Coll.FindOne(context.Background(), bson.M{"id": job.ID}).Decode(&existingJob)
+	err := r.Coll.FindOne(context.Background(), bson.M{"_id": job.ID}).Decode(&existingJob)
 	if err == mongo.ErrNoDocuments {
 		// Job doesn't exist, insert it
 		_, err = r.Coll.InsertOne(context.Background(), job)
@@ -49,7 +49,7 @@ func (r *MongoDbRepository) Save(job *domain.Job) error {
 		job.Version++
 		updateResult, err := r.Coll.ReplaceOne(
 			context.Background(),
-			bson.M{"id": job.ID, "version": existingJob.Version},
+			bson.M{"_id": job.ID, "version": existingJob.Version},
 			job,
 		)
 
@@ -71,7 +71,7 @@ func (r *MongoDbRepository) Save(job *domain.Job) error {
 // Returns an error if any error occurs during the operation.
 func (r *MongoDbRepository) FindById(id domain.JobId) (*domain.Job, error) {
 	var job domain.Job
-	err := r.Coll.FindOne(context.Background(), bson.M{"id": id}).Decode(&job)
+	err := r.Coll.FindOne(context.Background(), bson.M{"_id": id}).Decode(&job)
 	if err == mongo.ErrNoDocuments {
 		return nil, nil
 	} else if err != nil {

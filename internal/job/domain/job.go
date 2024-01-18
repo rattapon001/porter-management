@@ -73,7 +73,7 @@ func (p *Porter) Scan(value interface{}) error {
 }
 
 type Job struct {
-	ID        JobId     `bson:"id" gorm:"primaryKey"`
+	ID        JobId     `bson:"_id" gorm:"primaryKey"`
 	Version   int       `bson:"version"`
 	Status    JobStatus `bson:"status"`
 	Accepted  bool      `bson:"accepted"`
