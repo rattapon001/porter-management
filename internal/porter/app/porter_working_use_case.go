@@ -11,7 +11,7 @@ func (s *PorterUseCaseImpl) PorterWorking(code domain.PorterCode) (*domain.Porte
 		return nil, error_handler.ErrPorterNotFound
 	}
 	porter.Working()
-	if err := s.Repo.Update(porter); err != nil {
+	if err := s.Repo.Save(porter); err != nil {
 		return nil, err
 	}
 	return porter, nil

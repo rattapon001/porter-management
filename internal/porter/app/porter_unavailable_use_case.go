@@ -11,7 +11,7 @@ func (s *PorterUseCaseImpl) PorterUnavailable(code domain.PorterCode) (*domain.P
 		return nil, error_handler.ErrPorterNotFound
 	}
 	porter.Unavailable()
-	if err := s.Repo.Update(porter); err != nil {
+	if err := s.Repo.Save(porter); err != nil {
 		return nil, err
 	}
 	return porter, nil

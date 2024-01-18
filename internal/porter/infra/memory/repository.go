@@ -13,17 +13,13 @@ func NewPorterMemoryRepository() *PorterMemoryRepository {
 }
 
 func (r *PorterMemoryRepository) Save(porter *domain.Porter) error {
-	r.porters = append(r.porters, porter)
-	return nil
-}
-
-func (r *PorterMemoryRepository) Update(porter *domain.Porter) error {
 	for i, p := range r.porters {
 		if p.ID == porter.ID {
 			r.porters[i] = porter
 			return nil
 		}
 	}
+	r.porters = append(r.porters, porter)
 	return nil
 }
 

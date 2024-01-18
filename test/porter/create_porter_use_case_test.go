@@ -19,11 +19,6 @@ func (m *MockRepository) Save(job *domain.Porter) error {
 	return args.Error(0)
 }
 
-func (m *MockRepository) Update(job *domain.Porter) error {
-	args := m.Called(job)
-	return args.Error(0)
-}
-
 func (m *MockRepository) FindAvailablePorter() *domain.Porter {
 	args := m.Called()
 	return args.Get(0).(*domain.Porter)

@@ -16,7 +16,7 @@ func TestPorterUnavalable(t *testing.T) {
 
 	mockRepo := new(MockRepository)
 	mockRepo.On("FindByCode", mock.AnythingOfType("domain.PorterCode")).Return(porter)
-	mockRepo.On("Update", mock.AnythingOfType("*domain.Porter")).Return(nil)
+	mockRepo.On("Save", mock.AnythingOfType("*domain.Porter")).Return(nil)
 
 	mockPublisher := new(MockEventHandler)
 	mockPublisher.On("Publish", mock.AnythingOfType("[]event.Event")).Return(nil)
