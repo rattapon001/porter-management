@@ -11,6 +11,6 @@ func InitPorterRouter(router *gin.Engine, PorterUseCase app.PorterUseCase) {
 	porterRouter := router.Group("/porters")
 	{
 		porterRouter.POST("/", porterHandler.NewPorter)
-		porterRouter.PUT("/:code/available", porterHandler.PorterAvailable)
+		porterRouter.PATCH("/:code/available", porterHandler.PorterAvailable)
 	}
 }
