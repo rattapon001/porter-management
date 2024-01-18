@@ -13,11 +13,11 @@ const (
 )
 
 type Porter struct {
-	ID     PorterId
-	Name   string
-	Code   PorterCode
-	Status PorterStatus
-	Token  string
+	ID     PorterId     `bson:"_id" gorm:"primary_key"`
+	Name   string       `bson:"name" json:"name"`
+	Code   PorterCode   `bson:"code" json:"code"`
+	Status PorterStatus `bson:"status" json:"status"`
+	Token  string       `bson:"token" json:"token"`
 }
 
 func NewPorter(name string, code string, token string) (*Porter, error) {
