@@ -2,6 +2,7 @@ package postgresorm
 
 import (
 	"github.com/rattapon001/porter-management/internal/job/domain"
+	infra_errors "github.com/rattapon001/porter-management/internal/job/infra/errors"
 	"gorm.io/gorm"
 )
 
@@ -18,21 +19,33 @@ func NewPostgresOrmRepository(db *gorm.DB) *PostgresOrmRepository {
 }
 
 // Save saves the given job to the Postgres database.
-// It first checks if the job already exists in the database by querying the job ID.
-// If the job does not exist, it inserts the job into the database.
-// If the job already exists, it updates the job's version and other fields.
-// The job's version is incremented before updating the job in the database.
-// The update is performed only if the current version in the database matches the version of the job being updated.
-// Returns an error if any database operation fails.
+// If the job already exists, it updates the existing record.
+// If the job doesn't exist, it inserts a new record.
+// It returns an error if there is any issue with the database operation.
 func (r *PostgresOrmRepository) Save(job *domain.Job) error {
-	var jobDB domain.Job
+	var existingJob domain.Job
 	currentVersion := job.Version
-	if err := r.db.First(&jobDB, job.ID).Error; err != nil {
-		return r.db.Save(job).Error
+	err := r.db.Where("id = ?", job.ID).First(&existingJob).Error
+	if err == gorm.ErrRecordNotFound {
+		// Job doesn't exist, insert it
+		err = r.db.Create(job).Error
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	} else {
+
+		if existingJob.Version != currentVersion {
+			return infra_errors.ErrVersionMismatch
+		}
+		job.Version++
+		err = r.db.Save(job).Error
+		if err != nil {
+			return err
+		}
 	}
-	// Job already exists, check version for optimistic locking
-	job.Version++
-	return r.db.Model(&jobDB).Updates(job).Where("version = ?", currentVersion).Error
+	return nil
 }
 
 func (r *PostgresOrmRepository) FindById(id domain.JobId) (*domain.Job, error) {
