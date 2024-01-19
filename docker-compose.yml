@@ -2,10 +2,11 @@ version: "3.5"
 
 services:
   postgres-db:
-    container_name: porter_management_pg_db
+    container_name: porter_management_db
     image: postgres:16
+    command: postgres -c max_wal_senders=2 -c wal_level=logical -c max_replication_slots=2
     ports:
-      - "5432:5432"
+      - "54321:5432"
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
@@ -14,6 +15,7 @@ services:
   mongodb:
     container_name: porter_management_mongo_db
     image: bitnami/mongodb:5.0
+    restart: always
     networks:
       - default
     environment:
@@ -36,6 +38,44 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: "123456"
     ports:
       - '8081:8081'
+
+  zookeeper:
+    image: 'bitnami/zookeeper:3.7'
+    restart: always
+    container_name: zookeeper
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: 'yes'
+    networks:
+      - default
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    restart: always
+    container_name: kafka
+    environment:
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+    ports:
+      - '9092:9092'
+    networks:
+      - default
+    depends_on:
+      - zookeeper
+
+  kowl:
+    image: quay.io/cloudhut/kowl:v1.4.0
+    container_name: kowl
+    restart: always
+    hostname: kowl
+    volumes:
+      - ./kowl.yml:/etc/kowl/config.yaml
+    entrypoint: ./kowl --config.filepath=/etc/kowl/config.yaml
+    ports:
+      - "8082:8080"
+    networks:
+      - default
+    depends_on:
+      - kafka
 
 networks:
   default:
