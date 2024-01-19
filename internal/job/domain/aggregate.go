@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/rattapon001/porter-management/pkg"
 )
@@ -31,5 +32,5 @@ func (a *Aggregate) Scan(value interface{}) error {
 }
 
 func (a *Aggregate) AppendEvent(eventName pkg.EventName, payload interface{}) {
-	a.Events = append(a.Events, pkg.Event{EventName: eventName, Payload: payload})
+	a.Events = append(a.Events, pkg.Event{EventName: eventName, Payload: payload, EventTime: time.Now()})
 }
