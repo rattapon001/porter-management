@@ -1,5 +1,10 @@
 package postgresorm
 
+import (
+	"os"
+	"sync"
+)
+
 type PostgresOrmConfig struct {
 	Host     string
 	Port     string
@@ -9,13 +14,19 @@ type PostgresOrmConfig struct {
 	SSLMode  string
 }
 
+var pgConfig *PostgresOrmConfig
+var once sync.Once
+
 func GetPostgresOrmConfig() *PostgresOrmConfig {
-	return &PostgresOrmConfig{
-		Host:     "localhost",
-		Port:     "5432",
-		User:     "postgres",
-		Password: "123456",
-		Database: "porter_management_db",
-		SSLMode:  "disable",
-	}
+	once.Do(func() {
+		pgConfig = &PostgresOrmConfig{
+			Host:     os.Getenv("DB_HOST"),
+			Port:     os.Getenv("DB_PORT"),
+			User:     os.Getenv("DB_USERNAME"),
+			Password: os.Getenv("DB_PASSWORD"),
+			Database: os.Getenv("DB_DATABASE"),
+			SSLMode:  os.Getenv("DB_SSLMODE"),
+		}
+	})
+	return pgConfig
 }

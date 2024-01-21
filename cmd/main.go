@@ -1,7 +1,10 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	job_router "github.com/rattapon001/porter-management/api/v1/routers/job"
 	porter_router "github.com/rattapon001/porter-management/api/v1/routers/porter"
 	postgresorm "github.com/rattapon001/porter-management/internal/infra/postgres_orm"
@@ -16,6 +19,11 @@ import (
 )
 
 func main() {
+
+	err := godotenv.Load("./configs/.env")
+	if err != nil {
+		log.Println("Error loading .env file")
+	}
 
 	dbConfig := postgresorm.GetPostgresOrmConfig()
 	db, err := postgresorm.NewPostgresOrmDbConnection(dbConfig)
