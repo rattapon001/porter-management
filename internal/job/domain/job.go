@@ -7,18 +7,18 @@ import (
 	domain_errors "github.com/rattapon001/porter-management/internal/job/domain/errors"
 )
 
-type JobId string
-type JobStatus string
+type JobId string     // JobId is a unique identifier for a job
+type JobStatus string // JobStatus is a status of a job
 
 const (
-	JobPendingStatus   JobStatus = "pending"
-	JobAcceptedStatus  JobStatus = "accepted"
-	JobWorkingStatus   JobStatus = "working"
-	JobCompletedStatus JobStatus = "completed"
+	JobPendingStatus   JobStatus = "pending"   // JobPendingStatus is a status of a job when it is created
+	JobAcceptedStatus  JobStatus = "accepted"  // JobAcceptedStatus is a status of a job when it is accepted by a porter
+	JobWorkingStatus   JobStatus = "working"   // JobWorkingStatus is a status of a job when it is started
+	JobCompletedStatus JobStatus = "completed" // JobCompletedStatus is a status of a job when it is completed
 )
 
 type Job struct {
-	ID        JobId     `bson:"_id" gorm:"primaryKey"`
+	ID        JobId     `bson:"_id" gorm:"primaryKey;type:uuid"`
 	Version   int       `bson:"version"`
 	Status    JobStatus `bson:"status"`
 	Accepted  bool      `bson:"accepted"`

@@ -1,0 +1,92 @@
+{
+  "name": "01_initial_migration",
+  "operations": [
+    {
+      "create_table": {
+        "name": "jobs",
+        "columns": [
+          {
+            "name": "id",
+            "type": "uuid",
+            "pk": true
+          },
+          {
+            "name": "version",
+            "type": "int"
+          },
+          {
+            "name": "status",
+            "type": "varchar(50)"
+          },
+          {
+            "name": "accepted",
+            "type": "boolean",
+            "default": "false"
+          },
+          {
+            "name": "location",
+            "type": "jsonb",
+            "nullable": true
+          },
+          {
+            "name": "patient",
+            "type": "jsonb",
+            "nullable": true
+          },
+          {
+            "name": "porter",
+            "type": "jsonb",
+            "nullable": true
+          },
+          {
+            "name": "check_in",
+            "type": "timestamptz",
+            "nullable": true
+          },
+          {
+            "name": "check_out",
+            "type": "timestamptz",
+            "nullable": true
+          },
+          {
+            "name": "aggregate",
+            "type": "jsonb",
+            "nullable": true
+          }
+        ]
+      }
+    },
+    {
+      "create_table": {
+        "name": "porters",
+        "columns": [
+          {
+            "name": "id",
+            "type": "uuid",
+            "pk": true
+          },
+          {
+            "name": "name",
+            "type": "varchar(255)",
+            "nullable": true
+          },
+          {
+            "name": "code",
+            "type": "varchar(255)",
+            "nullable": true
+          },
+          {
+            "name": "status",
+            "type": "varchar(50)",
+            "nullable": true
+          },
+          {
+            "name": "token",
+            "type": "text",
+            "nullable": true
+          }
+        ]
+      }
+    }
+  ]
+}
