@@ -1,0 +1,39 @@
+{
+  "name": "02_create_table_equipment",
+  "operations": [
+    {
+      "create_table": {
+        "name": "equipment",
+        "columns": [
+          {
+            "name": "id",
+            "type": "uuid",
+            "pk": true
+          },
+          {
+            "name": "job_id",
+            "type": "uuid",
+            "nullable": true,
+            "references": {
+              "name": "fk_job_id",
+              "table": "jobs",
+              "column": "id"
+            },
+            "up": "(SELECT CASE WHEN EXISTS (SELECT 1 FROM jobs WHERE jobs.id = job_id) THEN job_id ELSE NULL END)",
+            "down": "job_id"
+          },
+          {
+            "name": "name",
+            "type": "varchar(255)",
+            "nullable": true
+          },
+          {
+            "name": "amount",
+            "type": "int",
+            "nullable": true
+          }
+        ]
+      }
+    }
+  ]
+}
