@@ -18,20 +18,20 @@ const (
 )
 
 type Job struct {
-	ID        JobId     `bson:"_id" gorm:"primaryKey;type:uuid"`
-	Version   int       `bson:"version"`
-	Status    JobStatus `bson:"status"`
-	Accepted  bool      `bson:"accepted"`
-	Location  Location  `bson:"location" gorm:"type:jsonb"`
-	Patient   Patient   `bson:"patient" gorm:"type:jsonb"`
-	Porter    Porter    `bson:"porter" gorm:"type:jsonb"`
-	CheckIn   time.Time `bson:"checkIn"`
-	CheckOut  time.Time `bson:"checkOut"`
-	Aggregate Aggregate `bson:"aggregate" gorm:"type:jsonb"`
+	ID         JobId       `bson:"_id" gorm:"primaryKey;type:uuid"`
+	Version    int         `bson:"version"`
+	Status     JobStatus   `bson:"status"`
+	Accepted   bool        `bson:"accepted"`
+	Location   Location    `bson:"location" gorm:"type:jsonb"`
+	Patient    Patient     `bson:"patient" gorm:"type:jsonb"`
+	Porter     Porter      `bson:"porter" gorm:"type:jsonb"`
+	CheckIn    time.Time   `bson:"checkIn"`
+	CheckOut   time.Time   `bson:"checkOut"`
+	Equipments []Equipment `bson:"equipments" gorm:"foreignKey:JobId"`
+	Aggregate  Aggregate   `bson:"aggregate" gorm:"type:jsonb"`
 }
 
-func NewJob(location Location, patient Patient) (*Job, error) {
-
+func NewJob(location Location, patient Patient, equipmentIds []EquipmentId) (*Job, error) {
 	ID, err := uuid.NewUUID()
 	if err != nil {
 		return nil, err
@@ -42,6 +42,10 @@ func NewJob(location Location, patient Patient) (*Job, error) {
 		Status:   JobPendingStatus,
 		Location: location,
 		Patient:  patient,
+	}
+	for _, eId := range equipmentIds {
+		equipment, _ := NewEquipment(eId, job.ID, "test", 1)
+		job.AddEquipment(*equipment)
 	}
 	job.JobCreatedEvent()
 	return job, nil
@@ -61,7 +65,7 @@ func (j *Job) JobCreatedEvent() {
 
 func (j *Job) Accept(porter Porter) error {
 	if j.Status != JobPendingStatus {
-		return domain_errors.CannotAcceptJob
+		return domain_errors.ErrCannotAcceptJob
 	}
 	j.Status = JobAcceptedStatus
 	j.Accepted = true
@@ -72,7 +76,7 @@ func (j *Job) Accept(porter Porter) error {
 
 func (j *Job) Start() error {
 	if j.Status != JobAcceptedStatus {
-		return domain_errors.CannotStartJob
+		return domain_errors.ErrCannotStartJob
 	}
 	j.CheckIn = time.Now()
 	j.Status = JobWorkingStatus
@@ -82,7 +86,7 @@ func (j *Job) Start() error {
 
 func (j *Job) Complete() error {
 	if j.Status != JobWorkingStatus {
-		return domain_errors.CannotCompleteJob
+		return domain_errors.ErrCannotCompleteJob
 	}
 	j.CheckOut = time.Now()
 	j.Status = JobCompletedStatus
@@ -129,4 +133,12 @@ func (j *Job) JobCompletedEvent() {
 		"check_out": j.CheckOut,
 	}
 	j.Aggregate.AppendEvent(JobCompletedEvent, payload)
+}
+
+func (j *Job) AddEquipment(equipment Equipment) error {
+	if j.Status != JobPendingStatus {
+		return domain_errors.ErrCannotAddEquipment
+	}
+	j.Equipments = append(j.Equipments, equipment)
+	return nil
 }

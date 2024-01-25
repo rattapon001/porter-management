@@ -26,7 +26,7 @@ func TestPGSave(t *testing.T) {
 		Name: "Rattapon Prasongpongchai",
 		HN:   "123456789",
 	}
-	job, err := job_domain.NewJob(location, Patient)
+	job, err := job_domain.NewJob(location, Patient, nil)
 
 	assert.Nil(err)
 	jobRepository := job_postgres.NewPostgresOrmRepository(db)

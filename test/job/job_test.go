@@ -73,7 +73,7 @@ func TestCreateNewJob(t *testing.T) {
 		HN:   "HN123",
 	}
 
-	createdJob, err := domain.NewJob(location, patient)
+	createdJob, err := domain.NewJob(location, patient, nil)
 	assert.Nil(err, "error should be nil")
 	assert.Equal(domain.JobPendingStatus, createdJob.Status, "created job status should be pending")
 	assert.Equal(1, len(createdJob.Aggregate.Events), "created job should have 1 event")
