@@ -1,6 +1,9 @@
 package domain
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	domainErrors "github.com/rattapon001/porter-management/internal/stock/domain/errors"
+)
 
 type ItemId string // ItemId is a unique identifier for a item
 
@@ -50,9 +53,13 @@ func (i *Item) Update(name string, qty int, code string) {
 	i.ItemUpdatedEvent()
 }
 
-func (i *Item) ItemAllocate(qty int, consumer Consumer) {
+func (i *Item) ItemAllocate(qty int, consumer Consumer) error {
+	if i.Qty < qty {
+		return domainErrors.ErrItemNotEnough
+	}
 	i.Qty -= qty
 	i.ItemAllocatedEvent(consumer)
+	return nil
 }
 
 func (i *Item) ItemAllocatedEvent(consumer Consumer) {
