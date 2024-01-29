@@ -11,6 +11,7 @@ type JobUseCase interface {
 	FindJobById(id domain.JobId) (*domain.Job, error)
 	StartJob(id domain.JobId) (*domain.Job, error)
 	CompleteJob(id domain.JobId) (*domain.Job, error)
+	JobAllocate(id domain.JobId, equipments []domain.Equipment) (*domain.Job, error)
 }
 
 type JobUseCaseImpl struct {
