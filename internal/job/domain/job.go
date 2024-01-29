@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -11,10 +12,12 @@ type JobId string     // JobId is a unique identifier for a job
 type JobStatus string // JobStatus is a status of a job
 
 const (
-	JobPendingStatus   JobStatus = "pending"   // JobPendingStatus is a status of a job when it is created
-	JobAcceptedStatus  JobStatus = "accepted"  // JobAcceptedStatus is a status of a job when it is accepted by a porter
-	JobWorkingStatus   JobStatus = "working"   // JobWorkingStatus is a status of a job when it is started
-	JobCompletedStatus JobStatus = "completed" // JobCompletedStatus is a status of a job when it is completed
+	JobPendingStatus             JobStatus = "pending"               // JobPendingStatus is a status of a job when it is created
+	JObEquipmentsNotEnoughStatus JobStatus = "equipments_not_enough" // JObEquipmentsNotEnoughStatus is a status of a job when it is created but not enough equipments
+	JobAllowcatedStatus          JobStatus = "allowcated"            // JobAllowcatedStatus is a status of a job when it is allowcated to a porter
+	JobAcceptedStatus            JobStatus = "accepted"              // JobAcceptedStatus is a status of a job when it is accepted by a porter
+	JobWorkingStatus             JobStatus = "working"               // JobWorkingStatus is a status of a job when it is started
+	JobCompletedStatus           JobStatus = "completed"             // JobCompletedStatus is a status of a job when it is completed
 )
 
 type Job struct {
@@ -31,7 +34,7 @@ type Job struct {
 	Aggregate  Aggregate   `bson:"aggregate" gorm:"type:jsonb"`
 }
 
-func NewJob(location Location, patient Patient, equipmentIds []EquipmentId) (*Job, error) {
+func NewJob(location Location, patient Patient, equipments []Equipment) (*Job, error) {
 	ID, err := uuid.NewUUID()
 	if err != nil {
 		return nil, err
@@ -43,28 +46,60 @@ func NewJob(location Location, patient Patient, equipmentIds []EquipmentId) (*Jo
 		Location: location,
 		Patient:  patient,
 	}
-	for _, eId := range equipmentIds {
-		equipment, _ := NewEquipment(eId, job.ID, "test", 1)
+	for _, e := range equipments {
+		equipment, _ := NewEquipment(e.EquipmentId, job.ID, e.Name, e.Amount)
 		job.AddEquipment(*equipment)
 	}
 	job.JobCreatedEvent()
+	log.Println("equipments: ", len(job.Equipments))
+	if len(job.Equipments) == 0 {
+		job.Allowcate()
+	}
 	return job, nil
 }
 
 func (j *Job) JobCreatedEvent() {
-
+	equipmentIds := make([]map[string]interface{}, len(j.Equipments))
+	for i, equipment := range j.Equipments {
+		equipmentIds[i] = map[string]interface{}{
+			"equipmentId": equipment.EquipmentId,
+			"jobId":       equipment.JobId,
+			"amount":      equipment.Amount,
+		}
+	}
 	payload := map[string]interface{}{
-		"job_id":   j.ID,
-		"version":  j.Version,
-		"status":   j.Status,
-		"location": j.Location,
-		"patient":  j.Patient,
+		"job_id":     j.ID,
+		"version":    j.Version,
+		"status":     j.Status,
+		"location":   j.Location,
+		"patient":    j.Patient,
+		"equipments": equipmentIds,
 	}
 	j.Aggregate.AppendEvent(JobCreatedEvent, payload)
 }
 
-func (j *Job) Accept(porter Porter) error {
+func (j *Job) Allowcate() error {
 	if j.Status != JobPendingStatus {
+		return domain_errors.ErrCannotAllowcateJob
+	}
+	j.Status = JobAllowcatedStatus
+	j.JobAllowcatedEvent()
+	return nil
+}
+
+func (j *Job) JobAllowcatedEvent() {
+	payload := map[string]interface{}{
+		"job_id":   j.ID,
+		"version":  j.Version + 1,
+		"status":   j.Status,
+		"location": j.Location,
+		"patient":  j.Patient,
+	}
+	j.Aggregate.AppendEvent(JobAllowcatedEvent, payload)
+}
+
+func (j *Job) Accept(porter Porter) error {
+	if j.Status != JobAllowcatedStatus {
 		return domain_errors.ErrCannotAcceptJob
 	}
 	j.Status = JobAcceptedStatus

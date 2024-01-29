@@ -57,9 +57,23 @@ func TestCreateNewJobUseCase(t *testing.T) {
 		HN:   "HN123",
 	}
 
+	equipments := []domain.Equipment{
+		{
+			EquipmentId: "1",
+			Name:        "Oxygen",
+			Amount:      1,
+		},
+		{
+			EquipmentId: "2",
+			Name:        "Wheelchair",
+			Amount:      1,
+		},
+	}
+
 	// publisher := mockPublisher
-	createdJob, err := JobUseCase.CreateNewJob(location, patient)
+	createdJob, err := JobUseCase.CreateNewJob(location, patient, equipments)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.JobPendingStatus, createdJob.Status, "created job status should be pending")
 	assert.Equal(1, len(createdJob.Aggregate.Events), "created job should have 1 event")
+	assert.Equal(2, len(createdJob.Equipments), "created job should have 2 equipments")
 }

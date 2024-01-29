@@ -6,7 +6,7 @@ import (
 )
 
 type JobUseCase interface {
-	CreateNewJob(location domain.Location, patient domain.Patient) (*domain.Job, error)
+	CreateNewJob(location domain.Location, patient domain.Patient, equipments []domain.Equipment) (*domain.Job, error)
 	AcceptJob(id domain.JobId, porter domain.Porter) (*domain.Job, error)
 	FindJobById(id domain.JobId) (*domain.Job, error)
 	StartJob(id domain.JobId) (*domain.Job, error)

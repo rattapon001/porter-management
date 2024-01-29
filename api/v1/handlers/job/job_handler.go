@@ -32,8 +32,17 @@ func (h *JobHandler) CreateNewJob(c *gin.Context) {
 		Name: job.Patient.Name,
 		HN:   job.Patient.HN,
 	}
+	equipments := []domain.Equipment{}
+	for _, e := range job.Equipments {
+		equipment := domain.Equipment{
+			EquipmentId: e.EquipmentId,
+			Name:        e.Name,
+			Amount:      e.Amount,
+		}
+		equipments = append(equipments, equipment)
+	}
 
-	newJob, err := h.JobUseCase.CreateNewJob(location, patient)
+	newJob, err := h.JobUseCase.CreateNewJob(location, patient, equipments)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

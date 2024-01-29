@@ -16,7 +16,7 @@ func TestAcceptJobUseCase(t *testing.T) {
 	mockRepo := new(MockRepository)
 	mockRepo.On("Save", mock.AnythingOfType("*domain.Job")).Return(nil)
 	mockRepo.On("FindById", mock.AnythingOfType("domain.JobId")).Return(&domain.Job{
-		Status: domain.JobPendingStatus,
+		Status: domain.JobAllowcatedStatus,
 		Aggregate: domain.Aggregate{
 			Events: []pkg.Event{
 				jobCreatedEvent,
