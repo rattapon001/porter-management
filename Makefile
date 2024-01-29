@@ -21,3 +21,4 @@ migrate:
 	pgroll init --postgres-url "postgres://postgres:postgres@localhost:54321/porter_management_db?sslmode=disable"
 	pgroll --postgres-url "postgres://postgres:postgres@localhost:54321/porter_management_db?sslmode=disable" start ./migration/01_initial_migration.json --complete
 	pgroll --postgres-url "postgres://postgres:postgres@localhost:54321/porter_management_db?sslmode=disable" start ./migration/02_create_table_equipment.json --complete
+	pgroll --postgres-url "postgres://postgres:postgres@localhost:54321/porter_management_db?sslmode=disable" start ./migration/03_create_table_items.json --complete
