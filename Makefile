@@ -14,7 +14,7 @@ down:
 	@echo "Stopping docker-compose..."
 	docker compose down
 
-// this is for local development only
+# this is for local development only
 .phony migrate:
 migrate:
 	@echo "Migrating..."

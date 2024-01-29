@@ -68,7 +68,7 @@ func (j *Job) JobCreatedEvent() {
 		}
 	}
 	payload := map[string]interface{}{
-		"job_id":     j.ID,
+		"jobId":      j.ID,
 		"version":    j.Version,
 		"status":     j.Status,
 		"location":   j.Location,
@@ -89,7 +89,7 @@ func (j *Job) Allowcate() error {
 
 func (j *Job) JobAllowcatedEvent() {
 	payload := map[string]interface{}{
-		"job_id":   j.ID,
+		"jobId":    j.ID,
 		"version":  j.Version + 1,
 		"status":   j.Status,
 		"location": j.Location,
@@ -109,7 +109,7 @@ func (j *Job) EquipmentsNotEnough() error {
 
 func (j *Job) JobEquipmentsNotEnoughEvent() {
 	payload := map[string]interface{}{
-		"job_id":   j.ID,
+		"jobId":    j.ID,
 		"version":  j.Version + 1,
 		"status":   j.Status,
 		"location": j.Location,
@@ -152,7 +152,7 @@ func (j *Job) Complete() error {
 func (j *Job) JobAcceptedEvent() {
 
 	payload := map[string]interface{}{
-		"job_id":   j.ID,
+		"jobId":    j.ID,
 		"version":  j.Version + 1,
 		"status":   j.Status,
 		"location": j.Location,
@@ -165,7 +165,7 @@ func (j *Job) JobAcceptedEvent() {
 func (j *Job) JobStartedEvent() {
 
 	payload := map[string]interface{}{
-		"job_id":   j.ID,
+		"jobId":    j.ID,
 		"version":  j.Version + 1,
 		"status":   j.Status,
 		"location": j.Location,
@@ -178,7 +178,7 @@ func (j *Job) JobStartedEvent() {
 
 func (j *Job) JobCompletedEvent() {
 	payload := map[string]interface{}{
-		"job_id":    j.ID,
+		"jobId":     j.ID,
 		"version":   j.Version + 1,
 		"status":    j.Status,
 		"location":  j.Location,
