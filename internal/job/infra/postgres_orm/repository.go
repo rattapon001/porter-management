@@ -1,8 +1,8 @@
 package postgresorm
 
 import (
+	infraErrors "github.com/rattapon001/porter-management/internal/infra/errors"
 	"github.com/rattapon001/porter-management/internal/job/domain"
-	infra_errors "github.com/rattapon001/porter-management/internal/job/infra/errors"
 	"gorm.io/gorm"
 )
 
@@ -37,7 +37,7 @@ func (r *PostgresOrmRepository) Save(job *domain.Job) error {
 	} else {
 
 		if existingJob.Version != currentVersion {
-			return infra_errors.ErrVersionMismatch
+			return infraErrors.ErrVersionMismatch
 		}
 		job.Version++
 		err = r.db.Save(job).Error

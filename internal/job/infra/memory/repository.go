@@ -1,8 +1,8 @@
 package memory
 
 import (
+	infraErrors "github.com/rattapon001/porter-management/internal/infra/errors"
 	"github.com/rattapon001/porter-management/internal/job/domain"
-	infraErrors "github.com/rattapon001/porter-management/internal/job/infra/errors"
 )
 
 type JobMemoryRepository struct {
