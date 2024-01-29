@@ -98,6 +98,26 @@ func (j *Job) JobAllowcatedEvent() {
 	j.Aggregate.AppendEvent(JobAllowcatedEvent, payload)
 }
 
+func (j *Job) EquipmentsNotEnough() error {
+	if j.Status != JobPendingStatus {
+		return domain_errors.ErrCannotAllowcateJob
+	}
+	j.Status = JObEquipmentsNotEnoughStatus
+	j.JobEquipmentsNotEnoughEvent()
+	return nil
+}
+
+func (j *Job) JobEquipmentsNotEnoughEvent() {
+	payload := map[string]interface{}{
+		"job_id":   j.ID,
+		"version":  j.Version + 1,
+		"status":   j.Status,
+		"location": j.Location,
+		"patient":  j.Patient,
+	}
+	j.Aggregate.AppendEvent(JobEquipmentsNotEnoughEvent, payload)
+}
+
 func (j *Job) Accept(porter Porter) error {
 	if j.Status != JobAllowcatedStatus {
 		return domain_errors.ErrCannotAcceptJob

@@ -10,11 +10,12 @@ import (
 )
 
 const (
-	JobCreatedEvent    pkg.EventName = "job_created"
-	JobAcceptedEvent   pkg.EventName = "job_accepted"
-	JobWorkingEvent    pkg.EventName = "job_working"
-	JobCompletedEvent  pkg.EventName = "job_completed"
-	JobAllowcatedEvent pkg.EventName = "job_allowcated"
+	JobCreatedEvent             pkg.EventName = "job_created"
+	JobAcceptedEvent            pkg.EventName = "job_accepted"
+	JobWorkingEvent             pkg.EventName = "job_working"
+	JobCompletedEvent           pkg.EventName = "job_completed"
+	JobAllowcatedEvent          pkg.EventName = "job_allowcated"
+	JobEquipmentsNotEnoughEvent pkg.EventName = "job_equipments_not_enough"
 )
 
 type Aggregate struct {
