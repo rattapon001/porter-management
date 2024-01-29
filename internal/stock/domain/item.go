@@ -50,18 +50,18 @@ func (i *Item) Update(name string, qty int, code string) {
 	i.ItemUpdatedEvent()
 }
 
-func (i *Item) ItemAllowcate(qty int, consumer Consumer) {
+func (i *Item) ItemAllocate(qty int, consumer Consumer) {
 	i.Qty -= qty
-	i.ItemAllowcatedEvent(consumer)
+	i.ItemAllocatedEvent(consumer)
 }
 
-func (i *Item) ItemAllowcatedEvent(consumer Consumer) {
+func (i *Item) ItemAllocatedEvent(consumer Consumer) {
 	payload := map[string]interface{}{
 		"itemId": i.ID,
 		"qty":    i.Qty,
 		"ref":    consumer.Ref,
 	}
-	i.Aggregate.AppendEvent(ItemAllowcatedEvent, payload)
+	i.Aggregate.AppendEvent(ItemAllocatedEvent, payload)
 }
 
 func (i *Item) ItemUpdatedEvent() {

@@ -8,7 +8,7 @@ import (
 
 type PorterUseCase interface {
 	CreateNewPorter(name string, token string) (*domain.Porter, error)
-	PorterAllowcate(payload domain.Job) (*domain.Porter, error)
+	PorterAllocate(payload domain.Job) (*domain.Porter, error)
 	PorterWorking(code domain.PorterCode) (*domain.Porter, error)
 	PorterAvailable(code domain.PorterCode) (*domain.Porter, error)
 	PorterUnavailable(code domain.PorterCode) (*domain.Porter, error)

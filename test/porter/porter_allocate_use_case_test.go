@@ -19,7 +19,7 @@ func (m *MockNotification) Notify(token string, payload pkg.NotificationPayload)
 	return args.Error(0)
 }
 
-func TestPorterAllowcate(t *testing.T) {
+func TestPorterAllocate(t *testing.T) {
 	assert := assert.New(t)
 	mockRepo := new(MockRepository)
 
@@ -43,7 +43,7 @@ func TestPorterAllowcate(t *testing.T) {
 		Location: location,
 		Patient:  patient,
 	}
-	porter, err := PorterUseCase.PorterAllowcate(job)
+	porter, err := PorterUseCase.PorterAllocate(job)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(porter.Name, "porter1", "should return porter1")
 }

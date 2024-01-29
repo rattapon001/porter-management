@@ -52,3 +52,11 @@ func (r *ItemPostgresOrmRepository) FindById(id domain.ItemId) (*domain.Item, er
 	}
 	return &item, nil
 }
+
+func (r *ItemPostgresOrmRepository) FindAll() ([]*domain.Item, error) {
+	var items []*domain.Item
+	if err := r.db.Find(&items).Error; err != nil {
+		return nil, err
+	}
+	return items, nil
+}

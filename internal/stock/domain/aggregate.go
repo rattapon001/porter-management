@@ -10,10 +10,10 @@ import (
 )
 
 const (
-	ItemCreatedEvent    = "item_created"    // ItemCreatedEvent is an event when a item is created
-	ItemUpdatedEvent    = "item_updated"    // ItemUpdatedEvent is an event when a item is updated
-	ItemDeletedEvent    = "item_deleted"    // ItemDeletedEvent is an event when a item is deleted
-	ItemAllowcatedEvent = "item_allowcated" // ItemAllowcatedEvent is an event when a item is allowcated ** for jobs
+	ItemCreatedEvent   = "item_created"   // ItemCreatedEvent is an event when a item is created
+	ItemUpdatedEvent   = "item_updated"   // ItemUpdatedEvent is an event when a item is updated
+	ItemDeletedEvent   = "item_deleted"   // ItemDeletedEvent is an event when a item is deleted
+	ItemAllocatedEvent = "item_Allocated" // ItemAllocatedEvent is an event when a item is Allocated ** for jobs
 )
 
 type Aggregate struct {

@@ -38,3 +38,7 @@ func (r *ItemMemoryRepository) FindById(id domain.ItemId) (*domain.Item, error) 
 	}
 	return nil, nil
 }
+
+func (r *ItemMemoryRepository) FindAll() ([]*domain.Item, error) {
+	return r.items, nil
+}

@@ -14,7 +14,7 @@ const (
 	JobAcceptedEvent            pkg.EventName = "job_accepted"
 	JobWorkingEvent             pkg.EventName = "job_working"
 	JobCompletedEvent           pkg.EventName = "job_completed"
-	JobAllowcatedEvent          pkg.EventName = "job_allowcated"
+	JobAllocatedEvent           pkg.EventName = "job_Allocated"
 	JobEquipmentsNotEnoughEvent pkg.EventName = "job_equipments_not_enough"
 )
 

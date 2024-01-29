@@ -13,7 +13,7 @@ type JobStatus string // JobStatus is a status of a job
 const (
 	JobPendingStatus             JobStatus = "pending"               // JobPendingStatus is a status of a job when it is created
 	JObEquipmentsNotEnoughStatus JobStatus = "equipments_not_enough" // JObEquipmentsNotEnoughStatus is a status of a job when it is created but not enough equipments
-	JobAllowcatedStatus          JobStatus = "allowcated"            // JobAllowcatedStatus is a status of a job when it is allowcated to a porter
+	JobAllocatedStatus           JobStatus = "Allocated"             // JobAllocatedStatus is a status of a job when it is Allocated to a porter
 	JobAcceptedStatus            JobStatus = "accepted"              // JobAcceptedStatus is a status of a job when it is accepted by a porter
 	JobWorkingStatus             JobStatus = "working"               // JobWorkingStatus is a status of a job when it is started
 	JobCompletedStatus           JobStatus = "completed"             // JobCompletedStatus is a status of a job when it is completed
@@ -51,7 +51,7 @@ func NewJob(location Location, patient Patient, equipments []Equipment) (*Job, e
 	}
 	job.JobCreatedEvent()
 	if len(job.Equipments) == 0 {
-		job.Allowcate()
+		job.Allocate()
 	}
 	return job, nil
 }
@@ -76,16 +76,16 @@ func (j *Job) JobCreatedEvent() {
 	j.Aggregate.AppendEvent(JobCreatedEvent, payload)
 }
 
-func (j *Job) Allowcate() error {
+func (j *Job) Allocate() error {
 	if j.Status != JobPendingStatus {
-		return domain_errors.ErrCannotAllowcateJob
+		return domain_errors.ErrCannotAllocateJob
 	}
-	j.Status = JobAllowcatedStatus
-	j.JobAllowcatedEvent()
+	j.Status = JobAllocatedStatus
+	j.JobAllocatedEvent()
 	return nil
 }
 
-func (j *Job) JobAllowcatedEvent() {
+func (j *Job) JobAllocatedEvent() {
 	payload := map[string]interface{}{
 		"jobId":    j.ID,
 		"version":  j.Version + 1,
@@ -93,12 +93,12 @@ func (j *Job) JobAllowcatedEvent() {
 		"location": j.Location,
 		"patient":  j.Patient,
 	}
-	j.Aggregate.AppendEvent(JobAllowcatedEvent, payload)
+	j.Aggregate.AppendEvent(JobAllocatedEvent, payload)
 }
 
 func (j *Job) EquipmentsNotEnough() error {
 	if j.Status != JobPendingStatus {
-		return domain_errors.ErrCannotAllowcateJob
+		return domain_errors.ErrCannotAllocateJob
 	}
 	j.Status = JObEquipmentsNotEnoughStatus
 	j.JobEquipmentsNotEnoughEvent()
@@ -117,7 +117,7 @@ func (j *Job) JobEquipmentsNotEnoughEvent() {
 }
 
 func (j *Job) Accept(porter Porter) error {
-	if j.Status != JobAllowcatedStatus {
+	if j.Status != JobAllocatedStatus {
 		return domain_errors.ErrCannotAcceptJob
 	}
 	j.Status = JobAcceptedStatus
