@@ -53,22 +53,12 @@ func (i *Item) Update(name string, qty int, code string) {
 	i.ItemUpdatedEvent()
 }
 
-func (i *Item) ItemAllocate(qty int, consumer Consumer) error {
+func (i *Item) ItemAllocate(qty int) error {
 	if i.Qty < qty {
 		return domainErrors.ErrItemNotEnough
 	}
 	i.Qty -= qty
-	i.ItemAllocatedEvent(consumer)
 	return nil
-}
-
-func (i *Item) ItemAllocatedEvent(consumer Consumer) {
-	payload := map[string]interface{}{
-		"itemId": i.ID,
-		"qty":    i.Qty,
-		"ref":    consumer.Ref,
-	}
-	i.Aggregate.AppendEvent(ItemAllocatedEvent, payload)
 }
 
 func (i *Item) ItemUpdatedEvent() {
