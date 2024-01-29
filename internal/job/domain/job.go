@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -51,7 +50,6 @@ func NewJob(location Location, patient Patient, equipments []Equipment) (*Job, e
 		job.AddEquipment(*equipment)
 	}
 	job.JobCreatedEvent()
-	log.Println("equipments: ", len(job.Equipments))
 	if len(job.Equipments) == 0 {
 		job.Allowcate()
 	}
