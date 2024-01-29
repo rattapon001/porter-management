@@ -11,6 +11,11 @@
             "pk": true
           },
           {
+            "name": "equipment_id",
+            "type": "uuid",
+            "nullable": true
+          },
+          {
             "name": "job_id",
             "type": "uuid",
             "nullable": true,
