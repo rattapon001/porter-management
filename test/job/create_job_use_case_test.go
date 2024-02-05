@@ -1,6 +1,7 @@
 package job_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/rattapon001/porter-management/internal/job/app"
@@ -71,7 +72,7 @@ func TestCreateNewJobUseCase(t *testing.T) {
 	}
 
 	// publisher := mockPublisher
-	createdJob, err := JobUseCase.CreateNewJob(location, patient, equipments)
+	createdJob, err := JobUseCase.CreateNewJob(context.Background(), location, patient, equipments)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.JobPendingStatus, createdJob.Status, "created job status should be pending")
 	assert.Equal(1, len(createdJob.Aggregate.Events), "created job should have 1 event")
