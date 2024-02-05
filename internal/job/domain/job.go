@@ -13,7 +13,7 @@ type JobStatus string // JobStatus is a status of a job
 const (
 	JobPendingStatus             JobStatus = "pending"               // JobPendingStatus is a status of a job when it is created
 	JObEquipmentsNotEnoughStatus JobStatus = "equipments_not_enough" // JObEquipmentsNotEnoughStatus is a status of a job when it is created but not enough equipments
-	JobAllocatedStatus           JobStatus = "Allocated"             // JobAllocatedStatus is a status of a job when it is Allocated to a porter
+	JobAllocatedStatus           JobStatus = "allocated"             // JobAllocatedStatus is a status of a job when it is Allocated to a porter
 	JobAcceptedStatus            JobStatus = "accepted"              // JobAcceptedStatus is a status of a job when it is accepted by a porter
 	JobWorkingStatus             JobStatus = "working"               // JobWorkingStatus is a status of a job when it is started
 	JobCompletedStatus           JobStatus = "completed"             // JobCompletedStatus is a status of a job when it is completed
