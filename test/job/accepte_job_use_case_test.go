@@ -1,6 +1,7 @@
 package job_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/rattapon001/porter-management/internal/job/app"
@@ -29,7 +30,7 @@ func TestAcceptJobUseCase(t *testing.T) {
 		Repo:      mockRepo,
 		Publisher: mockPublisher,
 	}
-	acceptedJob, err := JobUseCase.AcceptJob("1", porter)
+	acceptedJob, err := JobUseCase.AcceptJob(context.Background(), "1", porter)
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.JobAcceptedStatus, acceptedJob.Status, "accepted job status should be accepted")
 	assert.Equal(2, len(acceptedJob.Aggregate.Events), "accepted job should have 2 events")

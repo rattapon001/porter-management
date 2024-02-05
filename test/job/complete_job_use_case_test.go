@@ -1,6 +1,7 @@
 package job_test
 
 import (
+	"context"
 	"log"
 	"testing"
 
@@ -33,7 +34,7 @@ func TestCompleteJobUseCase(t *testing.T) {
 		Publisher: mockPublisher,
 	}
 
-	startedJob, err := JobUseCase.CompleteJob("1")
+	startedJob, err := JobUseCase.CompleteJob(context.Background(), "1")
 	log.Println("TestCompletedJob startedJob", startedJob)
 	log.Println("TestCompletedJob err", err)
 	assert.NoError(err, "should not return an error")

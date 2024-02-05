@@ -10,11 +10,11 @@ import (
 
 type JobUseCase interface {
 	CreateNewJob(ctx context.Context, location domain.Location, patient domain.Patient, equipments []domain.Equipment) (*domain.Job, error)
-	AcceptJob(id domain.JobId, porter domain.Porter) (*domain.Job, error)
+	AcceptJob(ctx context.Context, id domain.JobId, porter domain.Porter) (*domain.Job, error)
 	FindJobById(id domain.JobId) (*domain.Job, error)
-	StartJob(id domain.JobId) (*domain.Job, error)
-	CompleteJob(id domain.JobId) (*domain.Job, error)
-	JobAllocate(id domain.JobId, equipments []domain.Equipment) (*domain.Job, error)
+	StartJob(ctx context.Context, id domain.JobId) (*domain.Job, error)
+	CompleteJob(ctx context.Context, id domain.JobId) (*domain.Job, error)
+	JobAllocate(ctx context.Context, id domain.JobId, equipments []domain.Equipment) (*domain.Job, error)
 }
 
 type JobUseCaseImpl struct {

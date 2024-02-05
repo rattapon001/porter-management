@@ -77,7 +77,6 @@ func retry(attempts int, sleep time.Duration, fn func() error) (err error) {
 		}
 
 	}
-	fmt.Println("after loop")
 	return fmt.Errorf("after %d attempts, last error: %s", attempts, err)
 }
 

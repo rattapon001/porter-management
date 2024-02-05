@@ -60,7 +60,7 @@ func (h *JobHandler) AcceptJob(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
 
-	job, err := h.JobUseCase.AcceptJob(jobId, porter)
+	job, err := h.JobUseCase.AcceptJob(context.Background(), jobId, porter)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -72,7 +72,7 @@ func (h *JobHandler) StartJob(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
 
-	job, err := h.JobUseCase.StartJob(jobId)
+	job, err := h.JobUseCase.StartJob(context.Background(), jobId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -83,7 +83,7 @@ func (h *JobHandler) StartJob(c *gin.Context) {
 func (h *JobHandler) CompleteJob(c *gin.Context) {
 	id := c.Param("id")
 	jobId := domain.JobId(id)
-	job, err := h.JobUseCase.CompleteJob(jobId)
+	job, err := h.JobUseCase.CompleteJob(context.Background(), jobId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

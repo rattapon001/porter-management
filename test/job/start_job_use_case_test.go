@@ -1,6 +1,7 @@
 package job_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/rattapon001/porter-management/internal/job/app"
@@ -31,7 +32,7 @@ func TestStartedJob(t *testing.T) {
 		Publisher: mockPublisher,
 	}
 
-	startedJob, err := JobUseCase.StartJob("1")
+	startedJob, err := JobUseCase.StartJob(context.Background(), "1")
 	assert.NoError(err, "should not return an error")
 	assert.Equal(domain.JobWorkingStatus, startedJob.Status, "started job status should be started")
 	assert.Equal(3, len(startedJob.Aggregate.Events), "started job should have 3 events")
