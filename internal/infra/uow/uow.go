@@ -72,7 +72,7 @@ func retry(attempts int, sleep time.Duration, fn func() error) (err error) {
 			time.Sleep(sleep)
 			sleep *= 2
 		} else {
-			fmt.Printf("cannot retry: %v\n", err)
+			fmt.Printf("cannot retry error : %v\n", err)
 			return err
 		}
 
