@@ -8,6 +8,10 @@ import (
 	infra_errors "github.com/rattapon001/porter-management/internal/infra/errors"
 	"github.com/rattapon001/porter-management/internal/job/domain"
 	job_postgres "github.com/rattapon001/porter-management/internal/job/infra/postgres_orm"
+	porter_domain "github.com/rattapon001/porter-management/internal/porter/domain"
+	porter_postgres "github.com/rattapon001/porter-management/internal/porter/infra/postgres_orm"
+	stock_domain "github.com/rattapon001/porter-management/internal/stock/domain"
+	stock_postgres "github.com/rattapon001/porter-management/internal/stock/infra/postgres_orm"
 	"gorm.io/gorm"
 )
 
@@ -17,15 +21,27 @@ var errRetryCondition = map[string]bool{
 }
 
 type uowStore struct {
-	jobs domain.JobRepository
+	job    domain.JobRepository
+	stock  stock_domain.ItemRepository
+	porter porter_domain.PorterRepository
 }
 
 type UnitOfWorkStore interface {
-	Jobs() domain.JobRepository
+	Job() domain.JobRepository
+	Stock() stock_domain.ItemRepository
+	Porter() porter_domain.PorterRepository
 }
 
-func (u *uowStore) Jobs() domain.JobRepository {
-	return u.jobs
+func (u *uowStore) Job() domain.JobRepository {
+	return u.job
+}
+
+func (u *uowStore) Stock() stock_domain.ItemRepository {
+	return u.stock
+}
+
+func (u *uowStore) Porter() porter_domain.PorterRepository {
+	return u.porter
 }
 
 type UnitOfWorkBlock func(UnitOfWorkStore) error
@@ -72,7 +88,9 @@ func (u *unitOfWork) DoInTx(ctx context.Context, fn UnitOfWorkBlock) (err error)
 	return retry(maxRetries, retryDelay, func() error {
 		return u.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 			uowStore := &uowStore{
-				jobs: job_postgres.NewPostgresOrmRepository(tx),
+				job:    job_postgres.NewPostgresOrmRepository(tx),
+				stock:  stock_postgres.NewPostgresOrmRepository(tx),
+				porter: porter_postgres.NewPostgresOrmRepository(tx),
 			}
 			return fn(uowStore)
 		})

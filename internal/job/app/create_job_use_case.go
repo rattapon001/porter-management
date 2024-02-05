@@ -15,7 +15,7 @@ func (s *JobUseCaseImpl) CreateNewJob(ctx context.Context, location domain.Locat
 		if err != nil {
 			return err
 		}
-		err = store.Jobs().Save(job)
+		err = store.Job().Save(job)
 		if err != nil {
 			return err
 		}
