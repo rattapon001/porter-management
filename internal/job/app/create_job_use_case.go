@@ -10,8 +10,7 @@ import (
 func (s *JobUseCaseImpl) CreateNewJob(ctx context.Context, location domain.Location, patient domain.Patient, equipments []domain.Equipment) (*domain.Job, error) {
 
 	var jobResult *domain.Job
-
-	s.Uow.DoInTx(ctx, func(store uow.UnitOfWorkStore) error {
+	err := s.Uow.DoInTx(ctx, func(store uow.UnitOfWorkStore) error {
 		job, err := domain.NewJob(location, patient, equipments)
 		if err != nil {
 			return err
@@ -24,8 +23,13 @@ func (s *JobUseCaseImpl) CreateNewJob(ctx context.Context, location domain.Locat
 			return err
 		}
 		jobResult = job
+
 		return nil
+
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return jobResult, nil
 }
