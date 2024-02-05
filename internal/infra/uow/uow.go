@@ -22,13 +22,13 @@ var errRetryCondition = map[string]bool{
 
 type uowStore struct {
 	job    domain.JobRepository
-	stock  stock_domain.ItemRepository
+	item   stock_domain.ItemRepository
 	porter porter_domain.PorterRepository
 }
 
 type UnitOfWorkStore interface {
 	Job() domain.JobRepository
-	Stock() stock_domain.ItemRepository
+	Item() stock_domain.ItemRepository
 	Porter() porter_domain.PorterRepository
 }
 
@@ -36,8 +36,8 @@ func (u *uowStore) Job() domain.JobRepository {
 	return u.job
 }
 
-func (u *uowStore) Stock() stock_domain.ItemRepository {
-	return u.stock
+func (u *uowStore) Item() stock_domain.ItemRepository {
+	return u.item
 }
 
 func (u *uowStore) Porter() porter_domain.PorterRepository {
@@ -89,7 +89,7 @@ func (u *unitOfWork) DoInTx(ctx context.Context, fn UnitOfWorkBlock) (err error)
 		return u.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 			uowStore := &uowStore{
 				job:    job_postgres.NewPostgresOrmRepository(tx),
-				stock:  stock_postgres.NewPostgresOrmRepository(tx),
+				item:   stock_postgres.NewPostgresOrmRepository(tx),
 				porter: porter_postgres.NewPostgresOrmRepository(tx),
 			}
 			return fn(uowStore)
