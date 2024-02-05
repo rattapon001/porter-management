@@ -8,6 +8,7 @@ import (
 	job_router "github.com/rattapon001/porter-management/api/v1/routers/job"
 	porter_router "github.com/rattapon001/porter-management/api/v1/routers/porter"
 	postgresorm "github.com/rattapon001/porter-management/internal/infra/postgres_orm"
+	"github.com/rattapon001/porter-management/internal/infra/uow"
 	job_app "github.com/rattapon001/porter-management/internal/job/app"
 	job_memory "github.com/rattapon001/porter-management/internal/job/infra/memory"
 	job_postgres "github.com/rattapon001/porter-management/internal/job/infra/postgres_orm"
@@ -40,10 +41,12 @@ func main() {
 		})
 	})
 
+	uow := uow.NewUnitOfWork(db)
+
 	// Init Job Router
 	jobRepository := job_postgres.NewPostgresOrmRepository(db)
 	publisher := job_memory.NewMockImplimentEventHandler()
-	JobUseCase := job_app.NewJobUseCase(jobRepository, publisher)
+	JobUseCase := job_app.NewJobUseCase(jobRepository, publisher, uow)
 	job_router.InitJobRouter(router, JobUseCase)
 
 	// Init Porter Router

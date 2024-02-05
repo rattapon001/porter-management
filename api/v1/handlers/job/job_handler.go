@@ -1,6 +1,7 @@
 package job_handler
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -42,7 +43,7 @@ func (h *JobHandler) CreateNewJob(c *gin.Context) {
 		equipments = append(equipments, equipment)
 	}
 
-	newJob, err := h.JobUseCase.CreateNewJob(location, patient, equipments)
+	newJob, err := h.JobUseCase.CreateNewJob(context.Background(), location, patient, equipments)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
