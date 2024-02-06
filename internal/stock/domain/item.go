@@ -15,12 +15,12 @@ type Item struct {
 	ID        ItemId    `bson:"_id" gorm:"primaryKey;type:uuid"`
 	Name      string    `bson:"name"`
 	Qty       int       `bson:"qty"`
-	Code      string    `bson:"code"`
+	Sku       string    `bson:"sku"`
 	Version   int       `bson:"version"`
 	Aggregate Aggregate `bson:"aggregate" gorm:"type:jsonb"`
 }
 
-func NewItem(name string, qty int, code string) (*Item, error) {
+func NewItem(name string, qty int, sku string) (*Item, error) {
 	ID, err := uuid.NewUUID()
 	if err != nil {
 		return nil, err
@@ -29,7 +29,7 @@ func NewItem(name string, qty int, code string) (*Item, error) {
 		ID:      ItemId(ID.String()),
 		Name:    name,
 		Qty:     qty,
-		Code:    code,
+		Sku:     sku,
 		Version: 1,
 	}
 	item.ItemCreatedEvent()
@@ -41,15 +41,15 @@ func (i *Item) ItemCreatedEvent() {
 		"itemId": i.ID,
 		"name":   i.Name,
 		"qty":    i.Qty,
-		"code":   i.Code,
+		"sku":    i.Sku,
 	}
 	i.Aggregate.AppendEvent(ItemCreatedEvent, payload)
 }
 
-func (i *Item) Update(name string, qty int, code string) {
+func (i *Item) Update(name string, qty int, sku string) {
 	i.Name = name
 	i.Qty = qty
-	i.Code = code
+	i.Sku = sku
 	i.ItemUpdatedEvent()
 }
 
@@ -66,7 +66,7 @@ func (i *Item) ItemUpdatedEvent() {
 		"itemId": i.ID,
 		"name":   i.Name,
 		"qty":    i.Qty,
-		"code":   i.Code,
+		"sku":    i.Sku,
 	}
 	i.Aggregate.AppendEvent(ItemUpdatedEvent, payload)
 }
