@@ -8,22 +8,6 @@ import (
 )
 
 func (s *JobUseCaseImpl) AcceptJob(ctx context.Context, id domain.JobId, porter domain.Porter) (*domain.Job, error) {
-	// job, err := s.Repo.FindById(domain.JobId(id))
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// if err := job.Accept(porter); err != nil {
-	// 	return nil, err
-	// }
-
-	// if err := s.Repo.Save(job); err != nil {
-	// 	return nil, err
-	// }
-	// if err := s.Publisher.Publish(job.Aggregate.Events); err != nil {
-	// 	return nil, err
-	// }
-	// return job, nil
-
 	var jobResult *domain.Job
 
 	err := s.Uow.DoInTx(ctx, func(store uow.UnitOfWorkStore) error {
