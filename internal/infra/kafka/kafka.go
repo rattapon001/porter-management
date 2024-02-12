@@ -12,7 +12,7 @@ func NewKafkaProducer() (*kafka.Producer, error) {
 }
 
 func NewKafkaConsumer() (*kafka.Consumer, error) {
-	config := getKafkaConfig()
+	config := GetKafkaConsumerConfig()
 	consumer, err := kafka.NewConsumer(config)
 	if err != nil {
 		return nil, err

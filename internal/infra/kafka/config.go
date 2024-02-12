@@ -18,3 +18,10 @@ func getKafkaConfig() *kafka.ConfigMap {
 	}
 	return config
 }
+
+func GetKafkaConsumerConfig() *kafka.ConfigMap {
+	config := getKafkaConfig()
+	config.SetKey("group.id", "porter-management")
+	config.SetKey("auto.offset.reset", "earliest")
+	return config
+}

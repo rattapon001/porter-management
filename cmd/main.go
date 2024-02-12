@@ -16,6 +16,9 @@ import (
 	porter_app "github.com/rattapon001/porter-management/internal/porter/app"
 	porter_memory "github.com/rattapon001/porter-management/internal/porter/infra/memory"
 	porter_postgres "github.com/rattapon001/porter-management/internal/porter/infra/postgres_orm"
+	stock_app "github.com/rattapon001/porter-management/internal/stock/app"
+	stock_kafka "github.com/rattapon001/porter-management/internal/stock/infra/kafka"
+	stock_postgres "github.com/rattapon001/porter-management/internal/stock/infra/postgres_orm"
 )
 
 func main() {
@@ -43,6 +46,14 @@ func main() {
 	})
 
 	kafkaProducer, err := kafka.NewKafkaProducer()
+	if err != nil {
+		panic(err)
+	}
+
+	kafkaConsumer, err := kafka.NewKafkaConsumer()
+	if err != nil {
+		panic(err)
+	}
 
 	uow := uow.NewUnitOfWork(db)
 
@@ -57,5 +68,14 @@ func main() {
 	PorterPublisher := porter_memory.NewMockImplimentEventHandler()
 	PorterUseCase := porter_app.NewPorterUseCase(porterRepository, PorterPublisher)
 	porter_router.InitPorterRouter(router, PorterUseCase)
+
+	stockRepository := stock_postgres.NewPostgresOrmRepository(db)
+	stockPublisher := stock_kafka.NewKafkaProducer(kafkaProducer)
+	stockUseCase := stock_app.NewStockUseCase(stockRepository, stockPublisher, uow)
+
+	stockConsumer := stock_kafka.NewKafkaConsumer(kafkaConsumer, stockUseCase)
+	stockConsumer.Subscribe([]string{"job_created"})
+
+	// Start the server
 	router.Run(port)
 }
