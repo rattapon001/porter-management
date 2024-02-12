@@ -54,6 +54,9 @@ services:
     container_name: kafka
     environment:
       KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://192.168.1.73:9092"
+      KAFKA_ADVERTISED_PORT: 9092
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     ports:
       - '9092:9092'
