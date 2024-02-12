@@ -12,7 +12,7 @@ type StockUseCase interface {
 	CreateItem(item *domain.Item) (*domain.Item, error)
 	GetItem(id domain.ItemId) (*domain.Item, error)
 	GetItems() ([]*domain.Item, error)
-	ItemAllocate(ctx context.Context, items []domain.Item, consumerRef string) (*domain.Item, error)
+	ItemAllocate(ctx context.Context, items []domain.Item, jobId string) (*domain.Item, error)
 }
 
 type StockUseCaseImpl struct {

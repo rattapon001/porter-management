@@ -12,7 +12,7 @@ const (
 	ItemAllocatedEventName pkg.EventName = "ItemAllocated"
 )
 
-func (s *StockUseCaseImpl) ItemAllocate(ctx context.Context, items []domain.Item, consumerRef string) (*domain.Item, error) {
+func (s *StockUseCaseImpl) ItemAllocate(ctx context.Context, items []domain.Item, jobId string) (*domain.Item, error) {
 
 	ItemEventPayload := []map[string]interface{}{}
 	err := s.Uow.DoInTx(ctx, func(store uow.UnitOfWorkStore) error {
@@ -37,7 +37,7 @@ func (s *StockUseCaseImpl) ItemAllocate(ctx context.Context, items []domain.Item
 			{
 				EventName: ItemAllocatedEventName,
 				Payload: map[string]interface{}{
-					"ref":   consumerRef,
+					"jobId": jobId,
 					"items": ItemEventPayload,
 				},
 			},

@@ -1,16 +1,43 @@
 package command
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
+
+	"github.com/rattapon001/porter-management/internal/stock/app"
+	"github.com/rattapon001/porter-management/internal/stock/domain"
 )
 
 type StockAllocateCommand struct {
-	// StockUseCase app.StockUseCase
+	StockUseCase app.StockUseCase
 }
 
-func (s *StockAllocateCommand) Execute(eventName string, payload interface{}) {
-	fmt.Printf("StockAllocateCommand : %s\n", eventName)
-	// if eventData, ok := event.(app.StockEvent); ok {
-	// 	s.StockUseCase.StockAllocate(eventData)
-	// }
+type jobCreateEventPayloadEquipments struct {
+	EquipmentId string `json:"EquipmentId"`
+	Amount      int    `json:"Amount"`
+	JobId       string `json:"JobId"`
+}
+
+type jobCreateEventPayload struct {
+	Equipments []jobCreateEventPayloadEquipments `json:"equipments"`
+	JobId      string                            `json:"jobId"`
+}
+
+func (s *StockAllocateCommand) Execute(eventName string, payload []byte) {
+	var data jobCreateEventPayload
+	err := json.Unmarshal([]byte(payload), &data)
+	if err != nil {
+		fmt.Println("Error unmarshal payload : ", err)
+		return
+	}
+	items := []domain.Item{}
+	for _, item := range data.Equipments {
+		items = append(items, domain.Item{
+			ID:  domain.ItemId(item.EquipmentId),
+			Qty: item.Amount,
+		})
+	}
+	_, err = s.StockUseCase.ItemAllocate(context.Background(), items, data.JobId)
+
 }

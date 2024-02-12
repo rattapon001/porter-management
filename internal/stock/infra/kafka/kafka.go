@@ -27,7 +27,9 @@ func (k *kafkaConsumer) Subscribe(topics []string) error {
 	}
 
 	eventHandlers := map[string]command.StockCommand{
-		"job_created": &command.StockAllocateCommand{},
+		"job_created": &command.StockAllocateCommand{
+			StockUseCase: k.StockUseCase,
+		},
 	}
 	go func() {
 		run := true
@@ -53,6 +55,7 @@ func (k *kafkaConsumer) Subscribe(topics []string) error {
 				fmt.Fprintf(os.Stderr, "%% Error: %v\n", e)
 				run = false
 			default:
+				continue
 				// fmt.Printf("Ignored %v\n", e)
 			}
 		}
