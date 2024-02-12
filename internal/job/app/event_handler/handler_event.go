@@ -5,5 +5,5 @@ import (
 )
 
 type EventHandler interface {
-	Publish(event []pkg.Event) error
+	Publish(events []pkg.Event) error
 }

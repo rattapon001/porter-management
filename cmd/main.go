@@ -7,10 +7,11 @@ import (
 	"github.com/joho/godotenv"
 	job_router "github.com/rattapon001/porter-management/api/v1/routers/job"
 	porter_router "github.com/rattapon001/porter-management/api/v1/routers/porter"
+	"github.com/rattapon001/porter-management/internal/infra/kafka"
 	postgresorm "github.com/rattapon001/porter-management/internal/infra/postgres_orm"
 	"github.com/rattapon001/porter-management/internal/infra/uow"
 	job_app "github.com/rattapon001/porter-management/internal/job/app"
-	job_memory "github.com/rattapon001/porter-management/internal/job/infra/memory"
+	job_kafka "github.com/rattapon001/porter-management/internal/job/infra/kafka"
 	job_postgres "github.com/rattapon001/porter-management/internal/job/infra/postgres_orm"
 	porter_app "github.com/rattapon001/porter-management/internal/porter/app"
 	porter_memory "github.com/rattapon001/porter-management/internal/porter/infra/memory"
@@ -41,11 +42,13 @@ func main() {
 		})
 	})
 
+	kafkaProducer, err := kafka.NewKafkaProducer()
+
 	uow := uow.NewUnitOfWork(db)
 
 	// Init Job Router
 	jobRepository := job_postgres.NewPostgresOrmRepository(db)
-	publisher := job_memory.NewMockImplimentEventHandler()
+	publisher := job_kafka.NewKafkaProducer(kafkaProducer)
 	JobUseCase := job_app.NewJobUseCase(jobRepository, publisher, uow)
 	job_router.InitJobRouter(router, JobUseCase)
 
