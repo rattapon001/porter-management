@@ -12,8 +12,13 @@ type kafkaProducer struct {
 	producer *kafka.Producer
 }
 
-func NewKafkaProducer(kafka *kafka.Producer) *kafkaProducer {
-	return &kafkaProducer{producer: kafka}
+func NewProducer() (*kafkaProducer, error) {
+	config := GetKafkaProducerConfig()
+	producer, err := kafka.NewProducer(config)
+	if err != nil {
+		return nil, err
+	}
+	return &kafkaProducer{producer: producer}, nil
 }
 
 func (k *kafkaProducer) Publish(events []pkg.Event) error {

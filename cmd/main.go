@@ -12,7 +12,6 @@ import (
 	postgresorm "github.com/rattapon001/porter-management/internal/infra/postgres_orm"
 	"github.com/rattapon001/porter-management/internal/infra/uow"
 	job_app "github.com/rattapon001/porter-management/internal/job/app"
-	job_kafka "github.com/rattapon001/porter-management/internal/job/infra/kafka"
 	job_postgres "github.com/rattapon001/porter-management/internal/job/infra/postgres_orm"
 	porter_app "github.com/rattapon001/porter-management/internal/porter/app"
 	porter_memory "github.com/rattapon001/porter-management/internal/porter/infra/memory"
@@ -36,8 +35,6 @@ func main() {
 		panic(err)
 	}
 
-	// db.AutoMigrate(&job_domain.Job{}, &porter_domain.Porter{})
-
 	port := ":8080"
 	router := gin.Default()
 	router.GET("/", func(c *gin.Context) {
@@ -46,12 +43,7 @@ func main() {
 		})
 	})
 
-	kafkaProducer, err := kafka.NewKafkaProducer()
-	if err != nil {
-		panic(err)
-	}
-
-	kafkaConsumer, err := kafka.NewKafkaConsumer()
+	kafkaConsumer, err := kafka.InitKafkaConsumer()
 	if err != nil {
 		panic(err)
 	}
@@ -60,7 +52,10 @@ func main() {
 
 	// Init Job Router
 	jobRepository := job_postgres.NewPostgresOrmRepository(db)
-	publisher := job_kafka.NewKafkaProducer(kafkaProducer)
+	publisher, err := kafka.NewProducer()
+	if err != nil {
+		panic(err)
+	}
 	JobUseCase := job_app.NewJobUseCase(jobRepository, publisher, uow)
 	job_router.InitJobRouter(router, JobUseCase)
 
@@ -71,7 +66,10 @@ func main() {
 	porter_router.InitPorterRouter(router, PorterUseCase)
 
 	stockRepository := stock_postgres.NewPostgresOrmRepository(db)
-	stockPublisher := stock_kafka.NewKafkaProducer(kafkaProducer)
+	stockPublisher, err := kafka.NewProducer()
+	if err != nil {
+		panic(err)
+	}
 	stockUseCase := stock_app.NewStockUseCase(stockRepository, stockPublisher, uow)
 
 	stockConsumer := stock_kafka.NewKafkaConsumer(kafkaConsumer, stockUseCase)
