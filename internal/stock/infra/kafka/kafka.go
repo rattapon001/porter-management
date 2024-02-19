@@ -26,11 +26,6 @@ func (k *kafkaConsumer) HandlerMessage(msg *kafka.Message) error {
 		},
 	}
 
-	if _, err := k.consumer.CommitMessage(msg); err != nil {
-		return fmt.Errorf("failed to commit message: %w", err)
-	}
-
-	fmt.Println("offset", msg.TopicPartition.Offset)
 	fmt.Printf("Message on %s:\n%s\n", msg.TopicPartition, msg.Value)
 	topic := msg.TopicPartition.Topic
 	if handler, ok := eventHandlers[*topic]; ok {
@@ -39,6 +34,10 @@ func (k *kafkaConsumer) HandlerMessage(msg *kafka.Message) error {
 		}
 	} else {
 		return fmt.Errorf("no handler found for event: %s", *topic)
+	}
+
+	if _, err := k.consumer.CommitMessage(msg); err != nil {
+		return fmt.Errorf("failed to commit message: %w", err)
 	}
 
 	return nil
@@ -69,7 +68,6 @@ func (k *kafkaConsumer) Subscribe(topics []string) error {
 				run = false
 			default:
 				continue
-				// fmt.Printf("Ignored %v\n", e)
 			}
 		}
 		k.consumer.Close()
