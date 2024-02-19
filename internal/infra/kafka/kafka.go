@@ -3,7 +3,7 @@ package kafka
 import "github.com/confluentinc/confluent-kafka-go/kafka"
 
 func NewKafkaProducer() (*kafka.Producer, error) {
-	config := getKafkaConfig()
+	config := GetKafkaProducerConfig()
 	producer, err := kafka.NewProducer(config)
 	if err != nil {
 		return nil, err

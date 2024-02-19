@@ -1,5 +1,5 @@
 package command
 
 type StockCommand interface {
-	Execute(eventName string, payload []byte)
+	Execute(eventName string, payload []byte) error
 }

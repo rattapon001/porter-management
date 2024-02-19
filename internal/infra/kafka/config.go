@@ -19,9 +19,16 @@ func getKafkaConfig() *kafka.ConfigMap {
 	return config
 }
 
+func GetKafkaProducerConfig() *kafka.ConfigMap {
+	config := getKafkaConfig()
+	config.SetKey("acks", "all")
+	return config
+}
+
 func GetKafkaConsumerConfig() *kafka.ConfigMap {
 	config := getKafkaConfig()
 	config.SetKey("group.id", "porter-management")
 	config.SetKey("auto.offset.reset", "earliest")
+	config.SetKey("enable.auto.commit", "false")
 	return config
 }

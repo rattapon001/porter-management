@@ -24,12 +24,12 @@ type jobCreateEventPayload struct {
 	JobId      string                            `json:"jobId"`
 }
 
-func (s *StockAllocateCommand) Execute(eventName string, payload []byte) {
+func (s *StockAllocateCommand) Execute(eventName string, payload []byte) error {
 	var data jobCreateEventPayload
 	err := json.Unmarshal([]byte(payload), &data)
 	if err != nil {
 		fmt.Println("Error unmarshal payload : ", err)
-		return
+		return err
 	}
 	items := []domain.Item{}
 	for _, item := range data.Equipments {
@@ -39,5 +39,10 @@ func (s *StockAllocateCommand) Execute(eventName string, payload []byte) {
 		})
 	}
 	_, err = s.StockUseCase.ItemAllocate(context.Background(), items, data.JobId)
-
+	if err != nil {
+		fmt.Println("Error allocate stock : ", err)
+		return err
+	}
+	return nil
+	// return errors.New("not implemented")
 }
