@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	job_router "github.com/rattapon001/porter-management/api/v1/routers/job"
 	porter_router "github.com/rattapon001/porter-management/api/v1/routers/porter"
+	stock_router "github.com/rattapon001/porter-management/api/v1/routers/stock"
 	"github.com/rattapon001/porter-management/internal/infra/kafka"
 	postgresorm "github.com/rattapon001/porter-management/internal/infra/postgres_orm"
 	"github.com/rattapon001/porter-management/internal/infra/uow"
@@ -75,6 +76,7 @@ func main() {
 
 	stockConsumer := stock_kafka.NewKafkaConsumer(kafkaConsumer, stockUseCase)
 	stockConsumer.Subscribe([]string{"job_created"})
+	stock_router.InitStockRouter(router, stockUseCase)
 
 	// Start the server
 	router.Run(port)

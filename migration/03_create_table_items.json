@@ -1,42 +1,42 @@
 {
-    "name": "03_create_table_Items",
-    "operations": [
-        {
-            "create_table": {
-                "name": "items",
-                "columns": [
-                    {
-                        "name": "id",
-                        "type": "uuid",
-                        "pk": true
-                    },
-                    {
-                        "name": "name",
-                        "type": "text",
-                        "nullable": true
-                    },
-                    {
-                        "name": "qty",
-                        "type": "int",
-                        "nullable": true
-                    },
-                    {
-                        "name": "version",
-                        "type": "int",
-                        "nullable": true
-                    },
-                    {
-                        "name": "code",
-                        "type": "varchar(255)",
-                        "nullable": true
-                    },
-                    {
-                        "name": "aggregate",
-                        "type": "jsonb",
-                        "nullable": true
-                    }
-                ]
-            }
-        }
-    ]
+  "name": "03_create_table_Items",
+  "operations": [
+    {
+      "create_table": {
+        "name": "items",
+        "columns": [
+          {
+            "name": "id",
+            "type": "uuid",
+            "pk": true
+          },
+          {
+            "name": "name",
+            "type": "text",
+            "nullable": true
+          },
+          {
+            "name": "qty",
+            "type": "int",
+            "nullable": true
+          },
+          {
+            "name": "version",
+            "type": "int",
+            "nullable": true
+          },
+          {
+            "name": "sku",
+            "type": "varchar(255)",
+            "nullable": true
+          },
+          {
+            "name": "aggregate",
+            "type": "jsonb",
+            "nullable": true
+          }
+        ]
+      }
+    }
+  ]
 }
