@@ -59,8 +59,13 @@ func main() {
 		panic(err)
 	}
 
+	jobDql, err := kafka.NewKafkaDLQs()
+	if err != nil {
+		panic(err)
+	}
+
 	JobUseCase := job_app.NewJobUseCase(jobRepository, publisher, uow)
-	jobComsumer := job_kafka.NewKafkaConsumer(initJobConsumer, JobUseCase)
+	jobComsumer := job_kafka.NewKafkaConsumer(initJobConsumer, JobUseCase, jobDql)
 	jobComsumer.Subscribe([]string{string(job_domain.ItemAllocatedEvent)})
 	job_router.InitJobRouter(router, JobUseCase)
 
@@ -80,8 +85,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	stockDql, err := kafka.NewKafkaDLQs()
+	if err != nil {
+		panic(err)
+	}
+
 	stockUseCase := stock_app.NewStockUseCase(stockRepository, stockPublisher, uow)
-	stockConsumer := stock_kafka.NewKafkaConsumer(initStockConsumer, stockUseCase)
+	stockConsumer := stock_kafka.NewKafkaConsumer(initStockConsumer, stockUseCase, stockDql)
 	stockConsumer.Subscribe([]string{string(job_domain.JobCreatedEvent)})
 	stock_router.InitStockRouter(router, stockUseCase)
 

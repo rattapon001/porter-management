@@ -10,13 +10,18 @@ import (
 	"github.com/rattapon001/porter-management/internal/job/domain"
 )
 
+type DLQsProducer interface {
+	SendToDLQs(msg kafka.Message, processingErr error) error
+}
+
 type kafkaConsumer struct {
 	consumer    *kafka.Consumer
 	JobsUseCase app.JobUseCase
+	dlq         DLQsProducer
 }
 
-func NewKafkaConsumer(consumer *kafka.Consumer, useCase app.JobUseCase) *kafkaConsumer {
-	return &kafkaConsumer{consumer: consumer, JobsUseCase: useCase}
+func NewKafkaConsumer(consumer *kafka.Consumer, useCase app.JobUseCase, dlq DLQsProducer) *kafkaConsumer {
+	return &kafkaConsumer{consumer: consumer, JobsUseCase: useCase, dlq: dlq}
 }
 
 func (k *kafkaConsumer) HandlerMessage(msg *kafka.Message) error {
@@ -31,14 +36,19 @@ func (k *kafkaConsumer) HandlerMessage(msg *kafka.Message) error {
 	topic := msg.TopicPartition.Topic
 	if handler, ok := eventHandlers[*topic]; ok {
 		if err := handler.Execute(*topic, msg.Value); err != nil {
+			err := k.dlq.SendToDLQs(*msg, err)
+			if err != nil {
+				return err
+			}
 			return fmt.Errorf("error executing handler for event %s: %w", *topic, err)
 		}
 	} else {
-		return fmt.Errorf("no handler found for event: %s", *topic)
-	}
-
-	if _, err := k.consumer.CommitMessage(msg); err != nil {
-		return fmt.Errorf("failed to commit message: %w", err)
+		err := fmt.Errorf("no handler found for event: %s", *topic)
+		err = k.dlq.SendToDLQs(*msg, err)
+		if err != nil {
+			return err
+		}
+		return err
 	}
 
 	return nil
