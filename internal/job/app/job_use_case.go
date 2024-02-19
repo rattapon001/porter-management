@@ -14,7 +14,7 @@ type JobUseCase interface {
 	FindJobById(id domain.JobId) (*domain.Job, error)
 	StartJob(ctx context.Context, id domain.JobId) (*domain.Job, error)
 	CompleteJob(ctx context.Context, id domain.JobId) (*domain.Job, error)
-	JobAllocate(ctx context.Context, id domain.JobId, equipments []domain.Equipment) (*domain.Job, error)
+	JobAllocate(ctx context.Context, id domain.JobId) (*domain.Job, error)
 }
 
 type JobUseCaseImpl struct {

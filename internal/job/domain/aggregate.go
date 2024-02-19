@@ -14,8 +14,9 @@ const (
 	JobAcceptedEvent            pkg.EventName = "job_accepted"
 	JobWorkingEvent             pkg.EventName = "job_working"
 	JobCompletedEvent           pkg.EventName = "job_completed"
-	JobAllocatedEvent           pkg.EventName = "job_Allocated"
+	JobAllocatedEvent           pkg.EventName = "job_allocated"
 	JobEquipmentsNotEnoughEvent pkg.EventName = "job_equipments_not_enough"
+	ItemAllocatedEvent          pkg.EventName = "item_allocated"
 )
 
 type Aggregate struct {

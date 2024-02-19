@@ -2,25 +2,39 @@ package command
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
 	"github.com/rattapon001/porter-management/internal/job/app"
 	"github.com/rattapon001/porter-management/internal/job/domain"
-	"github.com/rattapon001/porter-management/pkg"
 )
 
 type ItemAllocateCommand struct {
 	JobsUseCase app.JobUseCase
 }
 
-type ItemAllocateEventPayload struct {
-	ref   string
-	items []domain.Equipment
+type AllocateEquipments struct {
+	EquipmentId string `json:"EquipmentId"`
+	Qty         int    `json:"Qty"`
 }
 
-func (i *ItemAllocateCommand) Execute(event interface{}) {
-	if eventData, ok := event.(pkg.Event); ok {
-		if eventPayload, ok := eventData.Payload.(ItemAllocateEventPayload); ok {
-			i.JobsUseCase.JobAllocate(context.Background(), domain.JobId(eventPayload.ref), eventPayload.items)
-		}
+type ItemAllocateEvent struct {
+	JobId string               `json:"jobId"`
+	Items []AllocateEquipments `json:"items"`
+}
+
+func (i *ItemAllocateCommand) Execute(eventName string, payload []byte) error {
+	var data ItemAllocateEvent
+
+	err := json.Unmarshal([]byte(payload), &data)
+	if err != nil {
+		fmt.Println("Error unmarshal payload : ", err)
+		return err
 	}
+	_, err = i.JobsUseCase.JobAllocate(context.Background(), domain.JobId(data.JobId))
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

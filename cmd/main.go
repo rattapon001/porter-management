@@ -12,6 +12,8 @@ import (
 	postgresorm "github.com/rattapon001/porter-management/internal/infra/postgres_orm"
 	"github.com/rattapon001/porter-management/internal/infra/uow"
 	job_app "github.com/rattapon001/porter-management/internal/job/app"
+	job_domain "github.com/rattapon001/porter-management/internal/job/domain"
+	job_kafka "github.com/rattapon001/porter-management/internal/job/infra/kafka"
 	job_postgres "github.com/rattapon001/porter-management/internal/job/infra/postgres_orm"
 	porter_app "github.com/rattapon001/porter-management/internal/porter/app"
 	porter_memory "github.com/rattapon001/porter-management/internal/porter/infra/memory"
@@ -43,11 +45,6 @@ func main() {
 		})
 	})
 
-	kafkaConsumer, err := kafka.InitKafkaConsumer()
-	if err != nil {
-		panic(err)
-	}
-
 	uow := uow.NewUnitOfWork(db)
 
 	// Init Job Router
@@ -56,7 +53,15 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	initJobConsumer, err := kafka.InitKafkaConsumer()
+	if err != nil {
+		panic(err)
+	}
+
 	JobUseCase := job_app.NewJobUseCase(jobRepository, publisher, uow)
+	jobComsumer := job_kafka.NewKafkaConsumer(initJobConsumer, JobUseCase)
+	jobComsumer.Subscribe([]string{string(job_domain.ItemAllocatedEvent)})
 	job_router.InitJobRouter(router, JobUseCase)
 
 	// Init Porter Router
@@ -70,10 +75,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	stockUseCase := stock_app.NewStockUseCase(stockRepository, stockPublisher, uow)
 
-	stockConsumer := stock_kafka.NewKafkaConsumer(kafkaConsumer, stockUseCase)
-	stockConsumer.Subscribe([]string{"job_created"})
+	initStockConsumer, err := kafka.InitKafkaConsumer()
+	if err != nil {
+		panic(err)
+	}
+	stockUseCase := stock_app.NewStockUseCase(stockRepository, stockPublisher, uow)
+	stockConsumer := stock_kafka.NewKafkaConsumer(initStockConsumer, stockUseCase)
+	stockConsumer.Subscribe([]string{string(job_domain.JobCreatedEvent)})
 	stock_router.InitStockRouter(router, stockUseCase)
 
 	// Start the server
