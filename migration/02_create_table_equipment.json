@@ -28,11 +28,6 @@
             "down": "job_id"
           },
           {
-            "name": "name",
-            "type": "varchar(255)",
-            "nullable": true
-          },
-          {
             "name": "amount",
             "type": "int",
             "nullable": true

@@ -37,7 +37,6 @@ func (h *JobHandler) CreateNewJob(c *gin.Context) {
 	for _, e := range job.Equipments {
 		equipment := domain.Equipment{
 			EquipmentId: e.EquipmentId,
-			Name:        e.Name,
 			Amount:      e.Amount,
 		}
 		equipments = append(equipments, equipment)

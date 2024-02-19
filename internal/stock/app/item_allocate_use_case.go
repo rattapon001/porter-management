@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/rattapon001/porter-management/internal/infra/uow"
 	"github.com/rattapon001/porter-management/internal/stock/domain"
@@ -13,7 +14,7 @@ const (
 )
 
 func (s *StockUseCaseImpl) ItemAllocate(ctx context.Context, items []domain.Item, jobId string) (*domain.Item, error) {
-
+	fmt.Println("ItemAllocate for JobId :: ", jobId)
 	ItemEventPayload := []map[string]interface{}{}
 	err := s.Uow.DoInTx(ctx, func(store uow.UnitOfWorkStore) error {
 		for _, item := range items {
@@ -35,7 +36,7 @@ func (s *StockUseCaseImpl) ItemAllocate(ctx context.Context, items []domain.Item
 		}
 		if err := s.Publisher.Publish([]pkg.Event{
 			{
-				EventName: ItemAllocatedEventName,
+				EventName: domain.ItemAllocatedEvent,
 				Payload: map[string]interface{}{
 					"jobId": jobId,
 					"items": ItemEventPayload,

@@ -46,7 +46,7 @@ func NewJob(location Location, patient Patient, equipments []Equipment) (*Job, e
 		Patient:  patient,
 	}
 	for _, e := range equipments {
-		equipment, _ := NewEquipment(e.EquipmentId, job.ID, e.Name, e.Amount)
+		equipment, _ := NewEquipment(e.EquipmentId, job.ID, e.Amount)
 		job.AddEquipment(*equipment)
 	}
 	job.JobCreatedEvent()

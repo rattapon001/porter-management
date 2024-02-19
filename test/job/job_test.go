@@ -76,12 +76,10 @@ func TestCreateNewJob(t *testing.T) {
 	equipments := []domain.Equipment{
 		{
 			EquipmentId: "1",
-			Name:        "Oxygen",
 			Amount:      1,
 		},
 		{
 			EquipmentId: "2",
-			Name:        "Wheelchair",
 			Amount:      1,
 		},
 	}
