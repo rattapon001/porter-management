@@ -87,6 +87,38 @@
           }
         ]
       }
+    },
+    {
+      "create_table": {
+        "name": "outboxevent",
+        "columns": [
+          {
+            "name": "id",
+            "type": "uuid",
+            "pk": true
+          },
+          {
+            "name": "aggregatetype",
+            "type": "varchar(255)",
+            "nullable": false
+          },
+          {
+            "name": "aggregateid",
+            "type": "varchar(255)",
+            "nullable": false
+          },
+          {
+            "name": "type",
+            "type": "varchar(255)",
+            "nullable": false
+          },
+          {
+            "name": "payload",
+            "type": "jsonb",
+            "nullable": false
+          }
+        ]
+      }
     }
   ]
 }
