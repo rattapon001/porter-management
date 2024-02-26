@@ -1,6 +1,7 @@
 package kafka
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -20,6 +21,11 @@ type kafkaConsumer struct {
 	dlq         DLQsProducer
 }
 
+type EventValue struct {
+	Schema  interface{} `json:"schema"`
+	Payload string      `json:"payload"`
+}
+
 func NewKafkaConsumer(consumer *kafka.Consumer, useCase app.JobUseCase, dlq DLQsProducer) *kafkaConsumer {
 	return &kafkaConsumer{consumer: consumer, JobsUseCase: useCase, dlq: dlq}
 }
@@ -35,7 +41,15 @@ func (k *kafkaConsumer) HandlerMessage(msg *kafka.Message) error {
 	fmt.Printf("Message on %s:\n%s\n", msg.TopicPartition, msg.Value)
 	topic := msg.TopicPartition.Topic
 	if handler, ok := eventHandlers[*topic]; ok {
-		if err := handler.Execute(*topic, msg.Value); err != nil {
+		var data EventValue
+		err := json.Unmarshal([]byte(msg.Value), &data)
+		if err != nil {
+			err := k.dlq.SendToDLQs(*msg, err)
+			if err != nil {
+				return err
+			}
+		}
+		if err := handler.Execute(*topic, []byte(data.Payload)); err != nil {
 			err := k.dlq.SendToDLQs(*msg, err)
 			if err != nil {
 				return err

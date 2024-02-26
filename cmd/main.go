@@ -9,6 +9,7 @@ import (
 	porter_router "github.com/rattapon001/porter-management/api/v1/routers/porter"
 	stock_router "github.com/rattapon001/porter-management/api/v1/routers/stock"
 	"github.com/rattapon001/porter-management/internal/infra/kafka"
+	"github.com/rattapon001/porter-management/internal/infra/outbox/publisher"
 	postgresorm "github.com/rattapon001/porter-management/internal/infra/postgres_orm"
 	"github.com/rattapon001/porter-management/internal/infra/uow"
 	job_app "github.com/rattapon001/porter-management/internal/job/app"
@@ -49,10 +50,7 @@ func main() {
 
 	// Init Job Router
 	jobRepository := job_postgres.NewPostgresOrmRepository(db)
-	publisher, err := kafka.NewProducer()
-	if err != nil {
-		panic(err)
-	}
+	publisher := publisher.NewPublisher()
 
 	initJobConsumer, err := kafka.InitKafkaConsumer()
 	if err != nil {
@@ -66,7 +64,7 @@ func main() {
 
 	JobUseCase := job_app.NewJobUseCase(jobRepository, publisher, uow)
 	jobComsumer := job_kafka.NewKafkaConsumer(initJobConsumer, JobUseCase, jobDql)
-	jobComsumer.Subscribe([]string{string(job_domain.ItemAllocatedEvent)})
+	jobComsumer.Subscribe([]string{string("job.events." + job_domain.ItemAllocatedEvent)})
 	job_router.InitJobRouter(router, JobUseCase)
 
 	// Init Porter Router
@@ -76,10 +74,6 @@ func main() {
 	porter_router.InitPorterRouter(router, PorterUseCase)
 
 	stockRepository := stock_postgres.NewPostgresOrmRepository(db)
-	stockPublisher, err := kafka.NewProducer()
-	if err != nil {
-		panic(err)
-	}
 
 	initStockConsumer, err := kafka.InitKafkaConsumer()
 	if err != nil {
@@ -91,9 +85,9 @@ func main() {
 		panic(err)
 	}
 
-	stockUseCase := stock_app.NewStockUseCase(stockRepository, stockPublisher, uow)
+	stockUseCase := stock_app.NewStockUseCase(stockRepository, publisher, uow)
 	stockConsumer := stock_kafka.NewKafkaConsumer(initStockConsumer, stockUseCase, stockDql)
-	stockConsumer.Subscribe([]string{string(job_domain.JobCreatedEvent)})
+	stockConsumer.Subscribe([]string{"job.events." + string(job_domain.JobCreatedEvent)})
 	stock_router.InitStockRouter(router, stockUseCase)
 
 	// Start the server
