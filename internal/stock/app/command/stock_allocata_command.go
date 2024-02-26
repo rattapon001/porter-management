@@ -25,6 +25,7 @@ type jobCreateEventPayload struct {
 }
 
 func (s *StockAllocateCommand) Execute(eventName string, payload []byte) error {
+
 	var data jobCreateEventPayload
 	err := json.Unmarshal([]byte(payload), &data)
 	if err != nil {
@@ -44,5 +45,5 @@ func (s *StockAllocateCommand) Execute(eventName string, payload []byte) error {
 		return err
 	}
 	return nil
-	// return errors.New("not implemented")
+
 }

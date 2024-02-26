@@ -17,6 +17,7 @@ func (s *StockUseCaseImpl) ItemAllocate(ctx context.Context, items []domain.Item
 	err := s.Uow.DoInTx(ctx, func(store uow.UnitOfWorkStore) error {
 		for _, item := range items {
 			itemOne, err := s.repo.FindById(item.ID)
+
 			if err != nil {
 				return err
 			}
@@ -32,6 +33,7 @@ func (s *StockUseCaseImpl) ItemAllocate(ctx context.Context, items []domain.Item
 				"Qty":         itemOne.Qty,
 			})
 		}
+
 		if err := s.Publisher.Publish([]pkg.Event{
 			{
 				EventName: domain.ItemAllocatedEvent,
@@ -40,7 +42,7 @@ func (s *StockUseCaseImpl) ItemAllocate(ctx context.Context, items []domain.Item
 					"items": ItemEventPayload,
 				},
 			},
-		}); err != nil {
+		}, store); err != nil {
 			return err
 		}
 		return nil

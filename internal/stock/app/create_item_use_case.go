@@ -17,7 +17,7 @@ func (s *StockUseCaseImpl) CreateItem(ctx context.Context, item *domain.Item) (*
 		if err := s.repo.Save(item); err != nil {
 			return err
 		}
-		if err := s.Publisher.Publish(item.Aggregate.Events); err != nil {
+		if err := s.Publisher.Publish(item.Aggregate.Events, store); err != nil {
 			return err
 		}
 		result = item
