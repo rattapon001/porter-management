@@ -33,7 +33,7 @@ func NewKafkaConsumer(consumer *kafka.Consumer, useCase app.JobUseCase, dlq DLQs
 func (k *kafkaConsumer) HandlerMessage(msg *kafka.Message) error {
 
 	eventHandlers := map[string]command.JobCommand{
-		string(domain.ItemAllocatedEvent): &command.ItemAllocateCommand{
+		string("job.events." + domain.ItemAllocatedEvent): &command.ItemAllocateCommand{
 			JobsUseCase: k.JobsUseCase,
 		},
 	}

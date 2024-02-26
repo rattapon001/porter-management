@@ -41,6 +41,7 @@ func (s *StockUseCaseImpl) ItemAllocate(ctx context.Context, items []domain.Item
 					"jobId": jobId,
 					"items": ItemEventPayload,
 				},
+				EventID: jobId,
 			},
 		}, store); err != nil {
 			return err
