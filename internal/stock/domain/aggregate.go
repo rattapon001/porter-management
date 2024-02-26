@@ -31,6 +31,6 @@ func (a *Aggregate) Scan(value interface{}) error {
 	return fmt.Errorf("failed to unmarshal AggregateDB value: %v", value)
 }
 
-func (a *Aggregate) AppendEvent(eventName pkg.EventName, payload interface{}) {
-	a.Events = append(a.Events, pkg.Event{EventName: eventName, Payload: payload, EventTime: time.Now()})
+func (a *Aggregate) AppendEvent(eventName pkg.EventName, payload interface{}, id string) {
+	a.Events = append(a.Events, pkg.Event{EventName: eventName, Payload: payload, EventTime: time.Now(), EventID: id})
 }

@@ -43,7 +43,7 @@ func (i *Item) ItemCreatedEvent() {
 		"qty":    i.Qty,
 		"sku":    i.Sku,
 	}
-	i.Aggregate.AppendEvent(ItemCreatedEvent, payload)
+	i.Aggregate.AppendEvent(ItemCreatedEvent, payload, string(i.ID))
 }
 
 func (i *Item) Update(name string, qty int, sku string) {
@@ -68,7 +68,7 @@ func (i *Item) ItemUpdatedEvent() {
 		"qty":    i.Qty,
 		"sku":    i.Sku,
 	}
-	i.Aggregate.AppendEvent(ItemUpdatedEvent, payload)
+	i.Aggregate.AppendEvent(ItemUpdatedEvent, payload, string(i.ID))
 }
 
 func (i *Item) Delete() {
@@ -79,5 +79,5 @@ func (i *Item) ItemDeletedEvent() {
 	payload := map[string]interface{}{
 		"itemId": i.ID,
 	}
-	i.Aggregate.AppendEvent(ItemDeletedEvent, payload)
+	i.Aggregate.AppendEvent(ItemDeletedEvent, payload, string(i.ID))
 }
