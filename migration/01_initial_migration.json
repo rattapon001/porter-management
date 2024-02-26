@@ -90,7 +90,7 @@
     },
     {
       "create_table": {
-        "name": "outbox_event",
+        "name": "outbox_events",
         "columns": [
           {
             "name": "id",

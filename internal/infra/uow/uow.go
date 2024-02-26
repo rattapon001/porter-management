@@ -6,6 +6,7 @@ import (
 	"time"
 
 	infra_errors "github.com/rattapon001/porter-management/internal/infra/errors"
+	outbox "github.com/rattapon001/porter-management/internal/infra/outbox"
 	"github.com/rattapon001/porter-management/internal/job/domain"
 	job_postgres "github.com/rattapon001/porter-management/internal/job/infra/postgres_orm"
 	porter_domain "github.com/rattapon001/porter-management/internal/porter/domain"
@@ -24,12 +25,14 @@ type uowStore struct {
 	job    domain.JobRepository
 	item   stock_domain.ItemRepository
 	porter porter_domain.PorterRepository
+	outbox outbox.OutboxRepository
 }
 
 type UnitOfWorkStore interface {
 	Job() domain.JobRepository
 	Item() stock_domain.ItemRepository
 	Porter() porter_domain.PorterRepository
+	Outbox() outbox.OutboxRepository
 }
 
 func (u *uowStore) Job() domain.JobRepository {
@@ -42,6 +45,10 @@ func (u *uowStore) Item() stock_domain.ItemRepository {
 
 func (u *uowStore) Porter() porter_domain.PorterRepository {
 	return u.porter
+}
+
+func (u *uowStore) Outbox() outbox.OutboxRepository {
+	return u.outbox
 }
 
 type UnitOfWorkBlock func(UnitOfWorkStore) error
@@ -90,6 +97,7 @@ func (u *unitOfWork) DoInTx(ctx context.Context, fn UnitOfWorkBlock) (err error)
 				job:    job_postgres.NewPostgresOrmRepository(tx),
 				item:   stock_postgres.NewPostgresOrmRepository(tx),
 				porter: porter_postgres.NewPostgresOrmRepository(tx),
+				outbox: outbox.NewPostgresOutboxRepository(tx),
 			}
 			return fn(uowStore)
 		})

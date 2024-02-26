@@ -73,7 +73,7 @@ func (j *Job) JobCreatedEvent() {
 		"patient":    j.Patient,
 		"equipments": equipmentIds,
 	}
-	j.Aggregate.AppendEvent(JobCreatedEvent, payload)
+	j.Aggregate.AppendEvent(j.ID, JobCreatedEvent, payload)
 }
 
 func (j *Job) Allocate() error {
@@ -93,7 +93,7 @@ func (j *Job) JobAllocatedEvent() {
 		"location": j.Location,
 		"patient":  j.Patient,
 	}
-	j.Aggregate.AppendEvent(JobAllocatedEvent, payload)
+	j.Aggregate.AppendEvent(j.ID, JobAllocatedEvent, payload)
 }
 
 func (j *Job) EquipmentsNotEnough() error {
@@ -113,7 +113,7 @@ func (j *Job) JobEquipmentsNotEnoughEvent() {
 		"location": j.Location,
 		"patient":  j.Patient,
 	}
-	j.Aggregate.AppendEvent(JobEquipmentsNotEnoughEvent, payload)
+	j.Aggregate.AppendEvent(j.ID, JobEquipmentsNotEnoughEvent, payload)
 }
 
 func (j *Job) Accept(porter Porter) error {
@@ -157,7 +157,7 @@ func (j *Job) JobAcceptedEvent() {
 		"patient":  j.Patient,
 		"porter":   j.Porter,
 	}
-	j.Aggregate.AppendEvent(JobAcceptedEvent, payload)
+	j.Aggregate.AppendEvent(j.ID, JobAcceptedEvent, payload)
 }
 
 func (j *Job) JobStartedEvent() {
@@ -171,7 +171,7 @@ func (j *Job) JobStartedEvent() {
 		"porter":   j.Porter,
 		"check_in": j.CheckIn,
 	}
-	j.Aggregate.AppendEvent(JobWorkingEvent, payload)
+	j.Aggregate.AppendEvent(j.ID, JobWorkingEvent, payload)
 }
 
 func (j *Job) JobCompletedEvent() {
@@ -185,7 +185,7 @@ func (j *Job) JobCompletedEvent() {
 		"check_in":  j.CheckIn,
 		"check_out": j.CheckOut,
 	}
-	j.Aggregate.AppendEvent(JobCompletedEvent, payload)
+	j.Aggregate.AppendEvent(j.ID, JobCompletedEvent, payload)
 }
 
 func (j *Job) AddEquipment(equipment Equipment) error {

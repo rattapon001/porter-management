@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/rattapon001/porter-management/internal/infra/uow"
 	"github.com/rattapon001/porter-management/internal/job/app"
 	"github.com/rattapon001/porter-management/internal/job/domain"
 	"github.com/rattapon001/porter-management/pkg"
@@ -34,7 +35,7 @@ type MockEventHandler struct {
 	mock.Mock
 }
 
-func (m *MockEventHandler) Publish(event []pkg.Event) error {
+func (m *MockEventHandler) Publish(event []pkg.Event, uow uow.UnitOfWorkStore) error {
 	args := m.Called(event)
 	return args.Error(0)
 }

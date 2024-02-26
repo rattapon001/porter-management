@@ -22,7 +22,7 @@ func (s *JobUseCaseImpl) JobAllocate(ctx context.Context, id domain.JobId) (*dom
 		if err := store.Job().Save(job); err != nil {
 			return err
 		}
-		if err := s.Publisher.Publish(job.Aggregate.Events); err != nil {
+		if err := s.Publisher.Publish(job.Aggregate.Events, store); err != nil {
 			return err
 		}
 		jobResult = job

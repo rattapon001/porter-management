@@ -19,7 +19,7 @@ func (s *JobUseCaseImpl) CreateNewJob(ctx context.Context, location domain.Locat
 		if err != nil {
 			return err
 		}
-		if err := s.Publisher.Publish(job.Aggregate.Events); err != nil {
+		if err := s.Publisher.Publish(job.Aggregate.Events, store); err != nil {
 			return err
 		}
 		jobResult = job
