@@ -3,7 +3,7 @@ version: "3.5"
 services:
   postgres-db:
     container_name: porter_management_db
-    image: debezium/example-postgres:2.5
+    image: debezium/postgres:16
     restart: always
     ports:
       - "54321:5432"
@@ -40,7 +40,7 @@ services:
   #     - '8081:8081'
 
   zookeeper:
-    image: debezium/zookeeper:2.5
+    image: bitnami/zookeeper:3.7.2
     restart: always
     container_name: zookeeper
     environment:
@@ -53,13 +53,13 @@ services:
       - 3888:3888
 
   kafka:
-    image: debezium/kafka:2.5
+    image: bitnami/kafka:3.5.2
     restart: always
     container_name: kafka
     environment:
-      ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://192.168.1.73:9092"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://192.168.2.135:9092"
       KAFKA_ADVERTISED_PORT: 9092
       ALLOW_PLAINTEXT_LISTENER: 'yes'
     ports:
