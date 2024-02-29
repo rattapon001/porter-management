@@ -1,19 +1,39 @@
 package command
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/rattapon001/porter-management/internal/porter/app"
 	"github.com/rattapon001/porter-management/internal/porter/domain"
-	"github.com/rattapon001/porter-management/pkg"
 )
 
 type PorterAllocateCommand struct {
 	PorterUseCase app.PorterUseCase
 }
 
-func (p *PorterAllocateCommand) Execute(event interface{}) {
-	if eventData, ok := event.(pkg.Event); ok {
-		if eventPayload, ok := eventData.Payload.(domain.Job); ok {
-			p.PorterUseCase.PorterAllocate(eventPayload)
-		}
+type jobAllocatedEventPayload struct {
+	JobId    string          `json:"jobId"`
+	Status   string          `json:"status"`
+	Location domain.Location `json:"locations"`
+	Patient  domain.Patient  `json:"patient"`
+}
+
+func (p *PorterAllocateCommand) Execute(eventName string, payload []byte) error {
+
+	var data jobAllocatedEventPayload
+	err := json.Unmarshal([]byte(payload), &data)
+	if err != nil {
+		fmt.Println("Error unmarshal payload : ", err)
+		return err
 	}
+
+	job := domain.NewJob(domain.JobId(data.JobId), data.Patient, data.Location)
+
+	_, err = p.PorterUseCase.PorterAllocate(*job)
+	if err != nil {
+		fmt.Println("Error allocate porter) : ", err)
+		return err
+	}
+	return nil
 }

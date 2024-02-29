@@ -19,3 +19,11 @@ type Job struct {
 	Location Location
 	Porter   Porter
 }
+
+func NewJob(id JobId, patient Patient, location Location) *Job {
+	return &Job{
+		ID:       id,
+		Patient:  patient,
+		Location: location,
+	}
+}
