@@ -41,7 +41,6 @@ func (k *kafkaConsumer) HandlerMessage(msg *kafka.Message) error {
 		return fmt.Errorf("failed to commit message: %w", err)
 	}
 
-	fmt.Printf("Message on %s:\n%s\n", msg.TopicPartition, msg.Value)
 	topic := msg.TopicPartition.Topic
 	if handler, ok := eventHandlers[*topic]; ok {
 

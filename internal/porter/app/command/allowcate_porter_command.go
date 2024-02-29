@@ -32,7 +32,7 @@ func (p *PorterAllocateCommand) Execute(eventName string, payload []byte) error 
 
 	_, err = p.PorterUseCase.PorterAllocate(*job)
 	if err != nil {
-		fmt.Println("Error allocate porter) : ", err)
+		fmt.Println("Error allocate porter : ", err)
 		return err
 	}
 	return nil

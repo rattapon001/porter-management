@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/rattapon001/porter-management/internal/infra/uow"
 	"github.com/rattapon001/porter-management/internal/notification/app"
 	event "github.com/rattapon001/porter-management/internal/porter/app/event_handler"
 	"github.com/rattapon001/porter-management/internal/porter/domain"
@@ -18,11 +19,14 @@ type PorterUseCaseImpl struct {
 	Repo      domain.PorterRepository
 	Publisher event.EventHandler
 	Noti      app.NotificationService
+	uow       uow.UnitOfWork
 }
 
-func NewPorterUseCase(repo domain.PorterRepository, publisher event.EventHandler) PorterUseCase {
+func NewPorterUseCase(repo domain.PorterRepository, publisher event.EventHandler, noti app.NotificationService, uow uow.UnitOfWork) PorterUseCase {
 	return &PorterUseCaseImpl{
 		Repo:      repo,
 		Publisher: publisher,
+		uow:       uow,
+		Noti:      noti,
 	}
 }
