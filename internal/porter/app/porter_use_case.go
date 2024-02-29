@@ -18,11 +18,11 @@ type PorterUseCase interface {
 type PorterUseCaseImpl struct {
 	Repo      domain.PorterRepository
 	Publisher event.EventHandler
-	Noti      app.NotificationService
+	Noti      app.NotificationUseCase
 	uow       uow.UnitOfWork
 }
 
-func NewPorterUseCase(repo domain.PorterRepository, publisher event.EventHandler, noti app.NotificationService, uow uow.UnitOfWork) PorterUseCase {
+func NewPorterUseCase(repo domain.PorterRepository, publisher event.EventHandler, noti app.NotificationUseCase, uow uow.UnitOfWork) PorterUseCase {
 	return &PorterUseCaseImpl{
 		Repo:      repo,
 		Publisher: publisher,

@@ -16,6 +16,7 @@ import (
 	job_domain "github.com/rattapon001/porter-management/internal/job/domain"
 	job_kafka "github.com/rattapon001/porter-management/internal/job/infra/kafka"
 	job_postgres "github.com/rattapon001/porter-management/internal/job/infra/postgres_orm"
+	notification_app "github.com/rattapon001/porter-management/internal/notification/app"
 	porter_app "github.com/rattapon001/porter-management/internal/porter/app"
 	porter_kafka "github.com/rattapon001/porter-management/internal/porter/infra/kafka"
 	porter_memory "github.com/rattapon001/porter-management/internal/porter/infra/memory"
@@ -80,9 +81,11 @@ func main() {
 		panic(err)
 	}
 
+	notificationUseCase := notification_app.NewNotificationUseCase()
+
 	porterRepository := porter_postgres.NewPostgresOrmRepository(db)
 	PorterPublisher := porter_memory.NewMockImplimentEventHandler()
-	PorterUseCase := porter_app.NewPorterUseCase(porterRepository, PorterPublisher)
+	PorterUseCase := porter_app.NewPorterUseCase(porterRepository, PorterPublisher, notificationUseCase, uow)
 	porterConsumer := porter_kafka.NewKafkaConsumer(initPorterConsumer, PorterUseCase, porterDql)
 	porterConsumer.Subscribe([]string{"job.events." + string(job_domain.JobAllocatedEvent)})
 	porter_router.InitPorterRouter(router, PorterUseCase)
